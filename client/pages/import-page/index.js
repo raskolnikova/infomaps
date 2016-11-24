@@ -4,7 +4,6 @@ import './index.less'
 import NavBar from '../../components/navbar/index';
 import Import from '../../components/import/index';
 
-import DataSetStore from '../../stores/DataSetStore'
 import DataSetActions from '../../action/DataSetAction'
 
 
@@ -18,7 +17,6 @@ export default class ImportPage extends Component {
   handleDataSetAdd(dataSet) {
          DataSetActions.createDataSet(dataSet);
      }
-
 
 
     render() {

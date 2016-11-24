@@ -13,7 +13,8 @@ export function listDataSet(){
 export function createDataSet(data){
   const dataSet = new DataSet({
     name: data.name,
-    createdAt:new Date()
+    file:data.file,
+    createdAt:data.createdAt
   });
   return dataSet.save();
 }

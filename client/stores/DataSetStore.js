@@ -10,9 +10,11 @@ let _loadingError = null;
 let _isLoading = true;
 
 function formatDataSet(dataset) {
+  console.log(dataSet.file.result+"datastore")
     return {
         id: dataset._id,
         name: dataset.name,
+        file:dataset.file,
         createdAt: dataset.createdAt
     };
 }

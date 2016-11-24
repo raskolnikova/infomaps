@@ -3,7 +3,7 @@
     "apiPrefix": "http://localhost:8067",
     "serverPort": "8067",
     "db":{
-        "name": "notes",
+        "name": "infomaps",
         "host": "localhost",
         "port": 27017
     }

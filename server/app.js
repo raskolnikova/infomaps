@@ -19,13 +19,14 @@ app.get('/import', (req, res) => {
     db.listDataSet().then(data => res.send(data));
 });
 
+app.post('/import', (req, res) => {
+  db.createDataSet(req.body).then(data => res.send(data));
+});
+
 app.get('/notes', (req, res) => {
     db.listNotes().then(data => res.send(data));
 });
 
-app.post('/import', (req, res) => {
-    db.createDataSet(req.body).then(data => res.send(data));
-});
 
 app.delete('/notes/:id', (req, res) => {
     db.deleteNote(req.params.id).then(data => res.send(data));

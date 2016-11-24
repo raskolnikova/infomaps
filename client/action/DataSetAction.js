@@ -31,10 +31,8 @@ const DataSetActions = {
         )
         .catch(err =>
             console.error(err),
-            console.log('error')
-
         );
-
+console.log(dataset)
     },
 
     deleteDataSet(dataSetId) {

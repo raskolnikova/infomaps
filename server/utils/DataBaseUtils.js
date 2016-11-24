@@ -16,16 +16,14 @@ export function setUpConnection(){
 
 export function listDataSet(){
   return DataSet.find();
-  console.log('список')
-
 }
 
 export function createDataSet(data){
   const dataSet = new DataSet({
     name: data.name,
-    createdAt:new Date()
+    file:data.file,
+    createdAt:data.createdAt
   });
-  console.log('принял')
   return dataSet.save();
 }
 
