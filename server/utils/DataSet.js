@@ -7,7 +7,7 @@ const DataSet = mongoose.model('DataSet');
 //для наборов данных
 
 export function listDataSet(){
-  return DataSet.find();
+  return DataSet.find({});
 }
 
 export function createDataSet(data){

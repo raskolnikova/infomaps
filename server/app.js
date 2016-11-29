@@ -4,9 +4,11 @@ import cors from 'cors';
 
 import {serverPort} from '../etc/config.json'
 
-import * as db from './utils/DataBaseUtils';
+import * as connection from './utils/DataBaseUtils'
 
-db.setUpConnection();
+import * as db from './utils/DataSet';
+
+connection.setUpConnection();
 
 const app = express();
 
@@ -15,8 +17,8 @@ app.use(bodyParser.json());
 
 app.use(cors({origin: '*'}));
 
-app.get('/import', (req, res) => {
-    db.listDataSet().then(data => res.send(data));
+app.get('/datasets', (req, res) => {
+  db.listDataSet().then(data => res.send(data));
 });
 
 app.post('/import', (req, res) => {
@@ -28,8 +30,8 @@ app.get('/notes', (req, res) => {
 });
 
 
-app.delete('/notes/:id', (req, res) => {
-    db.deleteNote(req.params.id).then(data => res.send(data));
+app.delete('/datasets/:id', (req, res) => {
+    db.deleteDataSet(req.params.id).then(data => res.send(data));
 });
 
 const server = app.listen(serverPort, () => {

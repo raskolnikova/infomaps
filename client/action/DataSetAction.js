@@ -3,13 +3,13 @@ import Constants from '../constants/AppConstants';
 
 import api from '../api';
 
-const DataSetActions = {
-    loadDataSet() {
+const DatasetActions = {
+    loadDataset() {
         AppDispatcher.dispatch({
             type: Constants.LOAD_DATASET_REQUEST
         });
 
-        api.listDataSet()
+        api.listDataset()
         .then(({ data }) =>
             AppDispatcher.dispatch({
                 type: Constants.LOAD_DATASET_SUCCESS,
@@ -24,18 +24,17 @@ const DataSetActions = {
         );
     },
 
-    createDataSet(dataset) {
-        api.createDataSet(dataset)
+    createDataset(dataset) {
+        api.createDataset(dataset)
         .then(() =>
-            this.loadDataSet(),
+            this.loadDataset(),
         )
         .catch(err =>
             console.error(err),
         );
-console.log(dataset)
     },
 
-    deleteDataSet(dataSetId) {
+    deleteDataset(dataSetId) {
         api.deleteDataSet(dataSetId)
         .then(() =>
             this.loadDataSet()
@@ -46,4 +45,4 @@ console.log(dataset)
     }
 };
 
-export default DataSetActions;
+export default DatasetActions;

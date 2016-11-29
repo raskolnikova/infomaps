@@ -17,11 +17,11 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="flex-container">
-                <Link to='/import'>
+                <Link to='/datasets'>
                     <div className='button'>
                         <div className='wrap-but'>
-                            <i className="fa fa-upload fa-3x"></i>
-                            <div className='inscription'>Импорт</div>
+                            <i className="fa fa-file-text fa-3x"></i>
+                            <div className='inscription'>Наборы данных</div>
                         </div>
                     </div>
                 </Link>
@@ -41,6 +41,7 @@ export default class NavBar extends Component {
                         </div>
                     </div>
                 </Link>
+
             </nav>
         )
     }

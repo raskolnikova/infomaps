@@ -5,12 +5,11 @@ import AppConstants from '../constants/AppConstants';
 
 const CHANGE_EVENT = 'change';
 
-let _dataset = [];
+let _datasets = [];
 let _loadingError = null;
 let _isLoading = true;
 
-function formatDataSet(dataset) {
-  console.log(dataSet.file.result+"datastore")
+function formatDataset(dataset) {
     return {
         id: dataset._id,
         name: dataset.name,
@@ -24,8 +23,8 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
         return _isLoading;
     },
 
-    getDataSet() {
-        return _dataset;
+    getDatasets() {
+        return _datasets;
     },
 
     emitChange: function() {
@@ -52,10 +51,11 @@ AppDispatcher.register(function(action) {
 
         case AppConstants.LOAD_DATASET_SUCCESS: {
             _isLoading = false;
-            _dataset = action.dataset.map( formatDataSet );
+            _datasets = action.dataset.map( formatDataset );
             _loadingError = null;
 
             TasksStore.emitChange();
+
             break;
         }
 
@@ -63,6 +63,7 @@ AppDispatcher.register(function(action) {
             _loadingError = action.error;
 
             TasksStore.emitChange();
+
             break;
         }
 
