@@ -4,13 +4,13 @@ import {Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'elemental'
 import FileInput from 'react-simple-file-input'
 import './index.less'
 
-function fileIsIncorrectFiletype(file) {
-    if (allowedFileTypes.indexOf(file.type) === -1) {
-        return true;
-    } else {
-        return false;
-    }
-}
+// function fileIsIncorrectFiletype(file) {
+//     if (allowedFileTypes.indexOf(file.type) === -1) {
+//         return true;
+//     } else {
+//         return false;
+//     }
+// }
 
 export default class Import extends Component {
     constructor() {
@@ -88,7 +88,7 @@ export default class Import extends Component {
                 <Modal isOpen={this.state.modalIsOpen} onCancel={this.modalOpen} backdropClosesModal>
                     <ModalHeader text="Lots of text to show scroll behavior" showCloseButton onClose={this.modalOpen}/>
                     <ModalBody>
-                        <FileInput readAs='text' onLoadStart={this.showProgressBar} onLoad={this.handleFileSelected} onProgress={this.updateProgressBar} cancelIf={fileIsIncorrectFiletype} onCancel={this.showInvalidFileTypeMessage} abortIf={this.cancelButtonClicked} onAbort={this.resetCancelButtonClicked}>
+                        <FileInput readAs='text' onLoadStart={this.showProgressBar} onLoad={this.handleFileSelected} onProgress={this.updateProgressBar}  onCancel={this.showInvalidFileTypeMessage} abortIf={this.cancelButtonClicked} onAbort={this.resetCancelButtonClicked}>
                             Нажмите здесь для выбора файла
                         </FileInput>
                     </ModalBody>

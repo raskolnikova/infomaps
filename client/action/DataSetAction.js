@@ -34,10 +34,10 @@ const DatasetActions = {
         );
     },
 
-    deleteDataset(dataSetId) {
-        api.deleteDataSet(dataSetId)
+    deleteDataset(datasetId) {
+        api.deleteDataset(datasetId)
         .then(() =>
-            this.loadDataSet()
+            this.loadDataset()
         )
         .catch(err =>
             console.error(err)

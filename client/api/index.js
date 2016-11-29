@@ -12,6 +12,6 @@ export default {
     },
 
     deleteDataset(datasetId) {
-        return axios.delete(`${apiPrefix}/import/${datasetId}`);
+        return axios.delete(`${apiPrefix}/datasets/${datasetId}`);
     }
 }
