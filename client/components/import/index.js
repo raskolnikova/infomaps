@@ -18,8 +18,7 @@ export default class Import extends Component {
         this.state = {
             modalIsOpen: false,
             file: {},
-            fileContents: {},
-            cancelButtonClicked: false,
+              cancelButtonClicked: false,
             progressBarVisible: false,
             progressPercent: 0
         }
@@ -41,6 +40,7 @@ export default class Import extends Component {
             createdAt: new Date()
         }
         this.props.onDatasetAdd(Dataset);
+      this.modalOpen()
     }
 
     modalOpen() {

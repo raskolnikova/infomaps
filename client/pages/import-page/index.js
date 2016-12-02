@@ -14,7 +14,7 @@ export default class ImportPage extends Component {
 
   }
 
-  handleDataSetAdd(dataSet) {
+ handleDataSetAdd(dataSet) {
          DataSetActions.createDataSet(dataSet);
      }
 

@@ -1,26 +1,11 @@
 import React, {Component} from 'react';
 import Jquery from 'jquery/dist/jquery.min'
 import Devextreme from 'devextreme/dist/js/dx.all'
-import {FormSelect} from 'elemental'
+import {FormSelect, Button} from 'elemental'
 
 import './index.less'
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
-
-
-
-const controlData = [
-    {
-        label: 'Данные 1',
-        value: 'Данные 1'
-    }, {
-        label: 'Данные 2',
-        value: 'Данные 2'
-    }, {
-        label: 'Данные 3',
-        value: 'Данные 3'
-    }
-]
 
 var myArray = [
     {
@@ -48,12 +33,19 @@ var myArray = [
 
 export default class Table extends Component {
 
+    constructor() {
+        super()
+        this.state = {
+            columns: []
+        }
+    }
+
     render() {
         return (
             <div>
-                <FormSelect options={controlData} onChange={this.handleSelect}/>
+                <Button>Наборы данных</Button>
                 <div className='dx-fieldset'>
-                  <div id="gridContainer"></div>
+                    <div id="gridContainer"></div>
                 </div>
             </div>
         )
@@ -61,26 +53,24 @@ export default class Table extends Component {
     }
 
     componentDidMount() {
-
+        var columns = this.props.columns
         var exemple = $(function() {
             $("#gridContainer").dxDataGrid({
                 dataSource: myArray,
-                columns: ['Name', 'City', 'Phone'],
-                paging: { pageSize: 20},
-       columnAutoWidth: true,
-       editing: {
-            mode: 'batch',
-            allowUpdating: true,
-            allowAdding: true,
-            allowDeleting: true
-        }
+                columns: columns,
+                paging: {
+                    pageSize: 20
+                },
+                columnAutoWidth: true,
+                editing: {
+                    mode: 'batch',
+                    allowUpdating: true,
+                    allowAdding: true,
+                    allowDeleting: true
+                }
             });
         });
 
-        // do the old-school stuff
-
-        // start a new React render tree with our node and the children
-        // passed in from above, this is the other side of the portal.
     }
 
 }

@@ -11,9 +11,7 @@ import {Route, IndexRoute} from 'react-router'
 
 export const routes = (
     <div>
-        <Route path='/' component={HomePage}>
-            <IndexRoute component={HomePage}/>
-        </Route>
+        <Route path='/' component={HomePage}/>
         <Route path='/charts' component={Charts}/>
         <Route path='/editor-chart' component={EditorChart}/>
         <Route path='/datasets' component={Datasets}/>

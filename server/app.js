@@ -13,7 +13,7 @@ connection.setUpConnection();
 const app = express();
 
 //парсим  данные в json
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '30mb'}));
 
 app.use(cors({origin: '*'}));
 
