@@ -11,23 +11,23 @@ var myArray = [
     {
         Name: "Andrew Fuller",
         City: "San Marino",
-        Phone: "(626) 555-0358"
+        Phone: 545
     }, {
         Name: "Nancy Davolio",
         City: "Glendale",
-        Phone: "(818) 555-9248"
+        Phone: 874
     }, {
         Name: "Steven Buchanan",
         City: "Chatsworth",
-        Phone: "(818) 555-8872"
+        Phone: 6565
     }, {
         Name: "Janet Leverling",
         City: "Pasadena",
-        Phone: "(626) 555-0281"
+        Phone: 58485
     }, {
         Name: "Margaret Peacock",
         City: "Los Angeles",
-        Phone: "(213) 555-7098"
+        Phone: 300
     }
 ];
 
@@ -36,7 +36,7 @@ export default class Table extends Component {
     constructor() {
         super()
         this.state = {
-            columns: []
+            data: []
         }
     }
 
@@ -45,6 +45,9 @@ export default class Table extends Component {
             <div>
                 <Button>Наборы данных</Button>
                 <div className='dx-fieldset'>
+                    <div id="textBox"></div>
+                    <div id="addColumnButton"></div>
+                    <div id="saveButton"></div>
                     <div id="gridContainer"></div>
                 </div>
             </div>
@@ -52,12 +55,43 @@ export default class Table extends Component {
 
     }
 
-    componentDidMount() {
-        var columns = this.props.columns
-        var exemple = $(function() {
+    // formatData(columns) {
+    //     let data = [];
+    //     let obj = {}
+    //     columns.forEach(function(item) {
+    //         obj[item] = ''
+    //     });
+    //     data.push(obj)
+    //     return data
+    // }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     console.log(this.state.data)
+    //     console.log(prevState.data)
+    //
+    //     // if (this.state.data != this.prevState.data)
+    //     //     this.props.passDataToEditorChart(this.state.data)
+    // }
+
+    getColumn() {
+        let columns = [];
+        for (let key in myArray[0]) {
+            columns.push(key)
+        }
+      return columns
+    }
+
+    renderTable() {
+        var column = this.getColumn()
+        var store = myArray;
+        var self = this;
+
+        $(function() {
             $("#gridContainer").dxDataGrid({
-                dataSource: myArray,
-                columns: columns,
+                dataSource: {
+                    store: store
+                },
+                columns: column,
                 paging: {
                     pageSize: 20
                 },
@@ -67,10 +101,16 @@ export default class Table extends Component {
                     allowUpdating: true,
                     allowAdding: true,
                     allowDeleting: true
+                },
+                onRowUpdated: function(info) {
+                    self.props.passDataToEditorChart(store);
                 }
             });
         });
+    }
 
+    componentDidMount() {
+        this.renderTable()
     }
 
 }

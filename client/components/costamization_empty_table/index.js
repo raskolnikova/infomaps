@@ -32,16 +32,17 @@ export default class CostamizationEmptyTable extends Component {
         return (
             <div>
                 <div id="columns">
-                    <Button submit onClick={this.addColumn}>Новый столбец</Button>
-                    <Button submit onClick={() => this.props.createTable(this.state.inputs)}>Создать таблицу</Button>
-                    <Form type="inline">
+                  <Button submit onClick={() => this.props.createTable()}>Создать пустую таблицу</Button>
+                    <Button submit >Открыть наборы данных</Button>
+                      <Button submit >Импортировать набор данных</Button>
+                    {/* <Form type="inline">
                         {this.state.inputs.map((item) => (
                             <FormField>
                                 <FormInput key={item.id} target={item.target} onChange={(e) => this.handleChange(e, item.id)}/>
                             </FormField>
                         ))
 }
-                    </Form>
+                    </Form>*/}
 
                 </div>
 

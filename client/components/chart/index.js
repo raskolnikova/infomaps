@@ -2,77 +2,143 @@ import React, {Component} from 'react';
 import Jquery from 'jquery/dist/jquery.min'
 import Devextreme from 'devextreme/dist/js/dx.all'
 import {FormSelect} from 'elemental'
+var Chart = require('react-d3-core').Chart;
+var LineChart = require('react-d3-basic').LineChart;
+var BarChart = require('react-d3-basic').BarChart;
+var PieChart = require('react-d3-basic').PieChart;
 
+PieChart
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.css';
 
-var chartDataSource = [
-    { year: 1950, Africa: 227, Americas: 331,
-      Asia: 1436, Europe: 547, Oceania: 12 },
-    { year: 1960, Africa: 285, Americas: 416,
-      Asia: 1718, Europe: 605, Oceania: 15 },
-    { year: 1970, Africa: 365, Americas: 512,
-      Asia: 2156, Europe: 657, Oceania: 19 },
-    { year: 1980, Africa: 478, Americas: 612,
-      Asia: 2644, Europe: 695, Oceania: 22 },
-    { year: 1990, Africa: 633, Americas: 720,
-      Asia: 3180, Europe: 722, Oceania: 26 },
-    { year: 2000, Africa: 810, Americas: 833,
-      Asia: 3678, Europe: 731, Oceania: 30 },
-    { year: 2010, Africa: 1016, Americas: 936,
-      Asia: 4149, Europe: 728, Oceania: 35 }
-];
+const chartData = [
+        {
+            name: "Lavon Hilll I",
+            BMI: 20.57,
+            age: 12,
+            birthday: "1994-10-26T00:00:00.000Z",
+            city: "Annatown",
+            married: true,
+            index: 1
+        }, {
+            name: "Clovis Pagac",
+            BMI: 24.28,
+            age: 26,
+            birthday: "1995-11-10T00:00:00.000Z",
+            city: "South Eldredtown",
+            married: false,
+            index: 3
+        }, {
+            name: "Gaylord Paucek",
+            BMI: 24.41,
+            age: 30,
+            birthday: "1975-06-12T00:00:00.000Z",
+            city: "Koeppchester",
+            married: true,
+            index: 5
+        }, {
+            name: "Ashlynn Kuhn MD",
+            BMI: 23.77,
+            age: 32,
+            birthday: "1985-08-09T00:00:00.000Z",
+            city: "West Josiemouth",
+            married: false,
+            index: 6
+        }
+    ]
 
+    var width = 700,
+        height = 300,
+        margins = {
+            left: 100,
+            right: 100,
+            top: 50,
+            bottom: 50
+        },
+        xScale = 'ordinal',
+        xLabel = "Letter",
+        yLabel = "Frequency",
+        yTicks = [
+            10, "%"
+        ],
+        title = "User sample",
+        // chart series,
+        // field: is what field your data want to be selected
+        // name: the name of the field that display in legend
+        // color: what color is the line
+        chartSeries = [
+            {
+                field: 'BMI',
+                name: 'BMI',
+                color: '#ff7f0e'
+            }
+        ],
+        // your x accessor
+        x = function(d) {
+            return d.index;
+        },
+        value = function(d) {
+            return + d.population;
+        },
+        name = function(d) {
+            return d.age;
+        },
+        innerRadius = 10;
 
-export default class Chart extends Component {
+    export default class ViewChart extends Component {
 
-    render() {
-        return (
-                <div className='dx-fieldset'>
-                  <div id="chartContainer"></div>
+        constructor()
+        {
+            super()
+            this.state = {
+                data: []
+            }
+            this.getData = this.getData.bind(this)
+
+        }
+
+        getChart(typeChart) {
+            console.log(typeChart);
+            switch (typeChart) {
+                case 'Гистограмма':
+                    return <BarChart title={title} data={chartData} width={width} height={height} chartSeries={chartSeries} x={x} xLabel={xLabel} xScale={xScale} yTicks={yTicks} yLabel={yLabel}/>
+                    break;
+                case 'График':
+                    return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={chartData} width={width} height={height} chartSeries={chartSeries} x={x}/>
+
+                    break;
+                case 'Круговая диаграмма':
+                    return <PieChart data={chartData} width={width} height={height} chartSeries={chartSeries} value={value} name={name}/>
+                    break;
+                case 'Кольцевая диаграмма':
+                    return <PieChart data={generalChartData} width={width} height={height} chartSeries={chartSeries} value={value} name={name} innerRadius={innerRadius}/>
+                    break;
+                default:
+                    return 'Неизвестный тип'
+
+            }
+        }
+
+        render() {
+            return (
+
+                <div>
+                    {this.getChart(this.props.typeChart)}
                 </div>
-        )
 
+            )
+
+        }
+
+        componentWillReceiveProps(nextProps) {
+            if (nextProps.data !== this.state.data) {
+                this.setState({data: nextProps.data});
+            }
+            console.log('chart');
+            console.log(this.state.data);
+        }
+
+        getData() {
+            return this.props.data
+        }
     }
-
-    componentDidMount() {
-
-        var exemple = $(function() {
-          $("#chartContainer").dxChart({
-                  dataSource: chartDataSource,
-                  commonSeriesSettings: {
-                      argumentField: 'year',
-                      type: 'fullStackedArea',
-                      label: {
-                          visible: true,
-                          connector: { visible: true }
-                      }
-                  },
-                  series: [
-                      { name: 'Oceania', valueField: 'Oceania' },
-                      { name: 'Africa', valueField: 'Africa' },
-                      { name: 'Americas', valueField: 'Americas' },
-                      { name: 'Asia', valueField: 'Asia' },
-                      { name: 'Europe', valueField: 'Europe' }
-                  ],
-                  title: 'Continental Population Shift (in millions)',
-                  legend: {
-                      horizontalAlignment: 'center',
-                      verticalAlignment: 'bottom'
-                  },
-                  pathModified: true,
-                  tooltip: {
-                      enabled: true,
-                      format: {
-                          percentPrecision: 2
-                      },
-                      customizeTooltip: function (value) {
-                          return { text: value.percentText };
-                      }
-                  }
-              });
-
-        });
-    }
-
-}

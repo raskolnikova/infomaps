@@ -16,26 +16,17 @@ import './index.less'
 
 const controlCharts = [
     {
-        label: 'Гистограмма',
-        value: 'Гистограмма'
-    }, {
         label: 'График',
         value: 'График'
+    }, {
+        label: 'Гистограмма',
+        value: 'Гистограмма'
     }, {
         label: 'Круговая диаграмма',
         value: 'Круговая диаграмма'
     }, {
-        label: 'Диаграмма с областями',
-        value: 'Диаграмма с областями'
-    }, {
-        label: 'Пузырьковая диаграмма',
-        value: 'Пузырьковая диаграмма'
-    }, {
-        label: 'Лепестковая диаграмма',
-        value: 'Лепестковая диаграмма'
-    }, {
-        label: 'Полярная диаграмма',
-        value: 'Полярная диаграмма'
+        label: 'Кольцевая диаграмма',
+        value: 'Кольцевая диаграмма'
     }
 ]
 
@@ -45,41 +36,26 @@ export default class EditorChart extends Component {
     {
         super()
         this.state = {
-            modalIsOpen: true,
+            modalIsOpen: false,
+            inputSelect: "График",
             cancelButtonClicked: false,
             visibleButton: true,
+            columns: [],
             showCostamization: true,
-            columns: []
+            data: []
         }
-
-        this.modalOpen = this.modalOpen.bind(this)
-        this.cancelButtonClicked = this.cancelButtonClicked.bind(this)
-        this.resetCancelButtonClicked = this.resetCancelButtonClicked.bind(this)
         this.createTable = this.createTable.bind(this)
+        this.passDataToEditorChart = this.passDataToEditorChart.bind(this)
     }
 
     updateSelect(option) {
         this.setState({inputSelect: option});
     }
 
-    modalOpen() {
-        this.setState(prevState => ({
-            modalIsOpen: !prevState.modalIsOpen
-        }));
-    }
-
-    cancelButtonClicked() {
-        return this.state.cancelButtonClicked;
-    }
-
-    resetCancelButtonClicked() {
-        this.setState({cancelButtonClicked: false});
-    }
-
-    createTable(columns) {
+    createTable() {
         this.setState(prevState => ({
             showCostamization: !prevState.showCostamization,
-            columns: this.getTarget(columns)
+            columns: []
         }));
     }
 
@@ -91,6 +67,11 @@ export default class EditorChart extends Component {
         return arrayColumns
     }
 
+    passDataToEditorChart(data) {
+        this.setState({data: data})
+        console.log('page')
+    }
+
     render() {
         return (
             <div>
@@ -100,25 +81,16 @@ export default class EditorChart extends Component {
 
                         {this.state.showCostamization
                             ? <CostamizationEmptyTable createTable={this.createTable}/>
-                            : <Table columns={this.state.columns}/>}
+                            : <Table columns={this.state.columns} passDataToEditorChart={this.passDataToEditorChart}/>}
 
                     </div>
                     <div className="chart-wrap">
                         <div className="select">
-                            <FormSelect options={controlCharts} onChange={this.handleSelect}/>
-                            <Chart/>
+                            <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
+                            <Chart data={this.state.data} typeChart={this.state.inputSelect}/>
                         </div>
                     </div>
                 </div>
-
-                <Modal isOpen={this.state.modalIsOpen} onCancel={this.modalOpen} backdropClosesModal>
-                    <ModalHeader text="Выберете одно из действий для привязки диаграммы и набора данных"/>
-                    <ModalBody>
-                        <Button onClick={this.modalOpen}>Создать пустую таблицу</Button>
-                        <Button>Импортировать набор данных</Button>
-                        <Button>Выбрать из библиотеки набора данных</Button>
-                    </ModalBody>
-                </Modal>
             </div>
         )
     }
