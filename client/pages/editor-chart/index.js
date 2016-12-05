@@ -30,6 +30,44 @@ const controlCharts = [
     }
 ]
 
+
+const chartData = [
+        {
+            name: "Lavon Hilll I",
+            BMI: 20.57,
+            age: 12,
+            birthday: "1994-10-26T00:00:00.000Z",
+            city: "Annatown",
+            married: true,
+            index: 1
+        }, {
+            name: "Clovis Pagac",
+            BMI: 24.28,
+            age: 26,
+            birthday: "1995-11-10T00:00:00.000Z",
+            city: "South Eldredtown",
+            married: false,
+            index: 3
+        }, {
+            name: "Gaylord Paucek",
+            BMI: 24.41,
+            age: 30,
+            birthday: "1975-06-12T00:00:00.000Z",
+            city: "Koeppchester",
+            married: true,
+            index: 5
+        }, {
+            name: "Ashlynn Kuhn MD",
+            BMI: 23.77,
+            age: 32,
+            birthday: "1985-08-09T00:00:00.000Z",
+            city: "West Josiemouth",
+            married: false,
+            index: 6
+        }
+    ]
+
+
 export default class EditorChart extends Component {
 
     constructor()
@@ -42,9 +80,8 @@ export default class EditorChart extends Component {
             visibleButton: true,
             columns: [],
             showCostamization: true,
-            data: []
+            data: chartData
         }
-        this.createTable = this.createTable.bind(this)
         this.passDataToEditorChart = this.passDataToEditorChart.bind(this)
     }
 
@@ -55,8 +92,16 @@ export default class EditorChart extends Component {
     createTable() {
         this.setState(prevState => ({
             showCostamization: !prevState.showCostamization,
-            columns: []
+            columns: this.getColumn(this.state.data)
         }));
+    }
+
+    getColumn(data) {
+        let columns = [];
+        for (let key in data[0]) {
+            columns.push(key)
+        }
+      return columns
     }
 
     getTarget(columns) {
@@ -69,7 +114,7 @@ export default class EditorChart extends Component {
 
     passDataToEditorChart(data) {
         this.setState({data: data})
-        console.log('page')
+        console.log(this.state.data)
     }
 
     render() {
@@ -80,8 +125,8 @@ export default class EditorChart extends Component {
                     <div className="table-wrap" id='dev-table'>
 
                         {this.state.showCostamization
-                            ? <CostamizationEmptyTable createTable={this.createTable}/>
-                            : <Table columns={this.state.columns} passDataToEditorChart={this.passDataToEditorChart}/>}
+                            ? <CostamizationEmptyTable createTable={() => this.createTable()}/>
+                          : <Table data={this.state.data} columns={this.state.columns} passDataToEditorChart={(data) => this.passDataToEditorChart(data)}/>}
 
                     </div>
                     <div className="chart-wrap">

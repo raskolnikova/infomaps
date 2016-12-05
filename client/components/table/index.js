@@ -73,17 +73,11 @@ export default class Table extends Component {
     //     //     this.props.passDataToEditorChart(this.state.data)
     // }
 
-    getColumn() {
-        let columns = [];
-        for (let key in myArray[0]) {
-            columns.push(key)
-        }
-      return columns
-    }
+
 
     renderTable() {
-        var column = this.getColumn()
-        var store = myArray;
+        var column = this.props.columns
+        var store = this.props.data;
         var self = this;
 
         $(function() {
