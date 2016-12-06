@@ -1,18 +1,22 @@
 import React, {Component} from 'react';
 import {Form, FormField, FormInput, Button} from 'elemental'
+import Import from '../../components/import/index';
+import ListDatasets from '../../components/list-datasets/'
+
+import DatasetStore from './../../stores/DataSetStore'
+import DatasetActions from '../../action/DataSetAction'
+
+
+function getStateFromFlux() {
+  return {isLoading: DatasetStore.isLoading(), dataset: DatasetStore.getDatasets()};
+}
 
 export default class CostamizationEmptyTable extends Component {
     constructor() {
         super()
-        this.state = {
-            inputs: [
-                {
-                    id: 1,
-                    target: ''
-                }
-            ]
-        }
+        this.state = getStateFromFlux();
         this.addColumn = this.addColumn.bind(this);
+        this._onChange = this._onChange.bind(this)
     }
 
     addColumn() {
@@ -28,25 +32,40 @@ export default class CostamizationEmptyTable extends Component {
 
     }
 
+    componentWillMount() {
+        DatasetActions.loadDataset();
+    }
+
+    componentDidMount() {
+        DatasetStore.addChangeListener(this._onChange);
+    }
+
+    componentWillUnmount() {
+        DatasetStore.removeChangeListener(this._onChange);
+    }
+
+    handleDatasetDelete(dataset) {
+        DatasetActions.deleteDataset(dataset.id);
+    }
+
+    handleDatasetAdd(dataset) {
+        DatasetActions.createDataset(dataset);
+    }
+
     render() {
         return (
             <div>
                 <div id="columns">
                   <Button submit onClick={() => this.props.createTable()}>Создать пустую таблицу</Button>
-                    <Button submit >Открыть наборы данных</Button>
-                      <Button submit >Импортировать набор данных</Button>
-                    {/* <Form type="inline">
-                        {this.state.inputs.map((item) => (
-                            <FormField>
-                                <FormInput key={item.id} target={item.target} onChange={(e) => this.handleChange(e, item.id)}/>
-                            </FormField>
-                        ))
-}
-                    </Form>*/}
-
+                    <Import onDatasetAdd={this.handleDatasetAdd}/>
+                    <ListDatasets datasets={this.state.dataset} onDatasetDelete={this.handleDatasetDelete} onDatasetGet={this.props.createTable}/>
                 </div>
 
             </div>
         )
+    }
+
+    _onChange() {
+        this.setState(getStateFromFlux())
     }
 }

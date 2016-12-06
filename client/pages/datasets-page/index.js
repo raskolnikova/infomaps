@@ -41,13 +41,18 @@ export default class DatasetsPage extends Component {
         DatasetActions.createDataset(dataset);
     }
 
+    handleDatasetGet(dataset){
+      console.log(dataset);
+      // this.props.createTable(dataset)
+    }
+
     render() {
         return (
             <div>
                 <NavBar/>
                 <div className="datasets-container">
                     <Import onDatasetAdd={this.handleDatasetAdd}/>
-                    <ListDatasets datasets={this.state.dataset} onDatasetDelete={this.handleDatasetDelete}/>
+                    <ListDatasets datasets={this.state.dataset} onDatasetDelete={this.handleDatasetDelete} onDatasetGet={this.handleDatasetGet}/>
                 </div>
             </div>
         );

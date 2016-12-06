@@ -1,13 +1,9 @@
 import React, {Component} from 'react';
-import Jquery from 'jquery/dist/jquery.min'
-import Devextreme from 'devextreme/dist/js/dx.all'
-import {FormSelect} from 'elemental'
 var Chart = require('react-d3-core').Chart;
 var LineChart = require('react-d3-basic').LineChart;
 var BarChart = require('react-d3-basic').BarChart;
 var PieChart = require('react-d3-basic').PieChart;
-import 'devextreme/dist/css/dx.common.css';
-import 'devextreme/dist/css/dx.light.css';
+
 
 
     var width = 700,
@@ -25,10 +21,7 @@ import 'devextreme/dist/css/dx.light.css';
             10, "%"
         ],
         title = "User sample",
-        // chart series,
-        // field: is what field your data want to be selected
-        // name: the name of the field that display in legend
-        // color: what color is the line
+
         chartSeries = [
             {
                 field: 'BMI',
@@ -56,7 +49,6 @@ import 'devextreme/dist/css/dx.light.css';
             this.state = {
                 data: []
             }
-
         }
 
         getChart(typeChart) {
@@ -76,28 +68,19 @@ import 'devextreme/dist/css/dx.light.css';
                     break;
                 default:
                     return 'Неизвестный тип'
-
             }
+        }
+
+        componentWillReceiveProps(nextProps) {
+          if (nextProps.data !== this.state.data)
+          this.setState({data: nextProps.data});
         }
 
         render() {
             return (
-
                 <div>
                     {this.getChart(this.props.typeChart)}
                 </div>
-
             )
-
         }
-
-        componentWillReceiveProps(nextProps) {
-            if (nextProps.data !== this.state.data) {
-                this.setState({data: nextProps.data});
-            }
-            // console.log('chart');
-            // console.log(this.state.data);
-        }
-
-
     }

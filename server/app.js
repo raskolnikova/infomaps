@@ -25,11 +25,6 @@ app.post('/import', (req, res) => {
   db.createDataSet(req.body).then(data => res.send(data));
 });
 
-app.get('/notes', (req, res) => {
-    db.listNotes().then(data => res.send(data));
-});
-
-
 app.delete('/datasets/:id', (req, res) => {
     db.deleteDataSet(req.params.id).then(data => res.send(data));
 });

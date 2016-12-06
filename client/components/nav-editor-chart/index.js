@@ -32,20 +32,6 @@ export default class NavEditorChart extends Component {
                       </div>
                   </div>
               </Link>
-
-              <div className='button'>
-                  <div className='wrap-but'>
-                      <i className="fa fa-upload fa-3x"></i>
-                      <div className='inscription'>Импорт набора данных</div>
-                  </div>
-              </div>
-              <div className='button'>
-                  <div className='wrap-but'>
-                      <i className="fa fa-upload fa-3x"></i>
-                      <div className='inscription'>Выбрать из библиотеки данных</div>
-                  </div>
-              </div>
-
           </nav>
         )
     }

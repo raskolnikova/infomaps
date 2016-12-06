@@ -16,6 +16,7 @@ export default class ListDatasets extends Component {
                         name={dataset.name}
                         createdAt={dataset.createdAt}
                         onDelete={this.props.onDatasetDelete.bind(null,dataset)}
+                        onDatasetGet={this.props.onDatasetGet.bind(null,dataset)}
                           />)}
                     </div>
             )

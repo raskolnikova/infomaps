@@ -22,7 +22,7 @@ const fullTime = day+"."+month+"."+year+" "+hours+":"+minutes
                 <i className ='fa fa-times' onClick={this.props.onDelete}></i>
                 </div>
 
-                <div className='inscription'>{this.props.name}</div>
+                <div className='inscription' onClick={this.props.onDatasetGet}>{this.props.name}</div>
                 <div>{this.getFormatDate(this.props.createdAt)}</div>
             </div>
         )

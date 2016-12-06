@@ -7,13 +7,7 @@ const DataSetSchema = new Schema({
         type: String
     },
     file: {
-        type: String,
-        get: function(data) {
-            return JSON.parse(data);
-        },
-        set: function(data) {
-            return JSON.stringify(data);
-        }
+        type: Object
     },
     createdAt: {
         type: Date
