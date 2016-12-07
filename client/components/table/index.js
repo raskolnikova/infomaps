@@ -34,11 +34,31 @@ export default class Table extends Component {
                     allowAdding: true,
                     allowDeleting: true
                 },
+                columnChooser: {
+                    enabled: true,
+                    height: 300,
+                    width: 400,
+                    emptyPanelText: 'Перетащите сюда ненужные столбцы',
+                    mode: 'select'
+                },
                 onRowUpdated: function(info) {
-                    self.props.passDataFromTableToEditorChart(store);
+                    self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());
+                },
+                onContentReady: function(info) {
+                    self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());
                 }
             });
         });
+    }
+
+    getVisibleColumns() {
+        let grid = $("#gridContainer").dxDataGrid("instance");
+        let columns = [];
+        for (var i = 0; i < grid.columnCount(); i++) {
+            if (grid.columnOption(i, "visible"))
+                columns.push(grid.columnOption(i, "dataField"));
+            }
+        return columns
     }
 
     componentDidMount() {

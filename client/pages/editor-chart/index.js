@@ -23,44 +23,6 @@ const controlCharts = [
     }
 ]
 
-// const chartData = [
-//     {
-//         "name": "Lavon Hilll I",
-//         "BMI": 20.57,
-//         "age": 12,
-//         "birthday": "1994-10-26T00:00:00.000Z",
-//         "city": "Annatown",
-//         "married": true,
-//         "index": 1
-//
-//     }, {
-//         "name": "Clovis Pagac",
-//         "BMI": 24.28,
-//         "age": 26,
-//         "birthday": "1995-11-10T00:00:00.000Z",
-//         "city": "South Eldredtown",
-//         "married": false,
-//         "index": 3
-//
-//     }, {
-//         "name": "Gaylord Paucek",
-//         "BMI": 24.41,
-//         "age": 30,
-//         "birthday": "1975-06-12T00:00:00.000Z",
-//         "city": "Koeppchester",
-//         "married": true,
-//         "index": 5
-//     }, {
-//         "name": "Ashlynn Kuhn MD",
-//         "BMI": 23.77,
-//         "age": 32,
-//         "birthday": "1985-08-09T00:00:00.000Z",
-//         "city": "West Josiemouth",
-//         "married": false,
-//         "index": 6
-//     }
-// ]
-
 export default class EditorChart extends Component {
 
     constructor()
@@ -70,7 +32,8 @@ export default class EditorChart extends Component {
             inputSelect: "График",
             columns: [],
             showCostamization: true,
-            data: []
+            data: [],
+            visibleColumns:[]
         }
     }
 
@@ -94,9 +57,8 @@ export default class EditorChart extends Component {
         return columns
     }
 
-    passDataFromTableToEditorChart(data) {
-        this.setState({data: data})
-        console.log(this.state.data)
+    passDataFromTableToEditorChart(data,visibleColumns) {
+        this.setState({data: data, visibleColumns:visibleColumns})
     }
 
     render() {
@@ -108,13 +70,13 @@ export default class EditorChart extends Component {
 
                         {this.state.showCostamization
                             ? <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
-                          : <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data) => this.passDataFromTableToEditorChart(data)}/>}
+                          : <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data,visibleColumns) => this.passDataFromTableToEditorChart(data,visibleColumns)}/>}
 
                     </div>
                     <div className="chart-wrap">
                         <div className="select">
                             <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
-                            <Chart data={this.state.data} typeChart={this.state.inputSelect}/>
+                            <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
                         </div>
                     </div>
                 </div>
