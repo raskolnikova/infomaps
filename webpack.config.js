@@ -7,13 +7,7 @@ module.exports = {
         publicPath: "build/",
         filename: "bundle.js"
     },
-    plugins: [
-  new webpack.ProvidePlugin({
-    $: "jquery/dist/jquery.min.js",
-    jQuery: "jquery/dist/jquery.min.js",
-    "window.jQuery": "jquery/dist/jquery.min.js"
-  })
-],
+    plugins: [new webpack.ProvidePlugin({$: "jquery/dist/jquery.min.js", jQuery: "jquery/dist/jquery.min.js", "window.jQuery": "jquery/dist/jquery.min.js"})],
     module: {
         loaders: [
             {
@@ -51,6 +45,9 @@ module.exports = {
             }, {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 loader: 'file?name=public/fonts/[name].[ext]'
+            }, {
+                test: /\.csv$/,
+                loader: 'dsv-loader'
             }
         ]
     }
