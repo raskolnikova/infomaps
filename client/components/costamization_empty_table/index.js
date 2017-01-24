@@ -55,8 +55,7 @@ export default class CostamizationEmptyTable extends Component {
     render() {
         return (
             <div>
-                <div id="columns">
-                  <Button submit onClick={() => this.props.createTable()}>Создать пустую таблицу</Button>
+                <div className="datasets-container">
                     <Import onDatasetAdd={this.handleDatasetAdd}/>
                     <ListDatasets datasets={this.state.dataset} onDatasetDelete={this.handleDatasetDelete} onDatasetGet={this.props.createTable}/>
                 </div>

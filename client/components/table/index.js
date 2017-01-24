@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import Jquery from 'jquery/dist/jquery.min'
 import Devextreme from 'devextreme/dist/js/dx.all'
-import {Button} from 'elemental'
 
 import './index.less'
 import 'devextreme/dist/css/dx.common.css';
@@ -68,7 +67,6 @@ export default class Table extends Component {
     render() {
         return (
             <div>
-                <Button>Наборы данных</Button>
                 <div className='dx-fieldset'>
                     <div id="textBox"></div>
                     <div id="addColumnButton"></div>

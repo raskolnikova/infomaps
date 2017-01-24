@@ -3,5 +3,8 @@ import keyMirror from 'keymirror';
 export default keyMirror({
     LOAD_DATASET_REQUEST: null,
     LOAD_DATASET_SUCCESS: null,
-    LOAD_DATASET_FAIL: null
+    LOAD_DATASET_FAIL: null,
+    LOAD_CHART_REQUEST: null,
+    LOAD_CHART_SUCCESS: null,
+    LOAD_CHART_FAIL: null
 });

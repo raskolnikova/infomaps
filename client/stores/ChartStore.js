@@ -1,20 +1,22 @@
 import { EventEmitter } from 'events';
 
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AppDispatcher from '../dispatcher/AppDispatcherChart';
 import AppConstants from '../constants/AppConstants';
 
 const CHANGE_EVENT = 'change';
 
-let _datasets = [];
+let _charts = [];
 let _loadingError = null;
 let _isLoading = true;
 
-function formatDataset(dataset) {
+function formatChart(chart) {
     return {
-        id: dataset._id,
-        name: dataset.name,
-        file:dataset.file,
-        createdAt: dataset.createdAt
+        id: chart._id,
+        name: chart.name,
+        file:chart.file,
+        visibleColumns:chart.visibleColumns,
+        type:chart.type,
+        createdAt: chart.createdAt
     };
 }
 
@@ -23,8 +25,8 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
         return _isLoading;
     },
 
-    getDatasets() {
-        return _datasets;
+    getСharts() {
+        return _charts;
     },
 
     emitChange: function() {
@@ -42,16 +44,16 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
     switch(action.type) {
-        case AppConstants.LOAD_DATASET_REQUEST: {
+        case AppConstants.LOAD_CHART_REQUEST: {
             _isLoading = true;
 
             TasksStore.emitChange();
             break;
         }
 
-        case AppConstants.LOAD_DATASET_SUCCESS: {
+        case AppConstants.LOAD_CHART_SUCCESS: {
             _isLoading = false;
-            _datasets = action.dataset.map( formatDataset );
+            _charts = action.chart.map( formatchart );
             _loadingError = null;
 
             TasksStore.emitChange();
@@ -59,7 +61,7 @@ AppDispatcher.register(function(action) {
             break;
         }
 
-        case AppConstants.LOAD_DATASET_FAIL: {
+        case AppConstants.LOAD_CHART_FAIL: {
             _loadingError = action.error;
 
             TasksStore.emitChange();
@@ -68,7 +70,7 @@ AppDispatcher.register(function(action) {
         }
 
         default: {
-            console.trace('No such handler');
+            console.log(action.type);
         }
     }
 });
