@@ -53,7 +53,7 @@ AppDispatcher.register(function(action) {
 
         case AppConstants.LOAD_CHART_SUCCESS: {
             _isLoading = false;
-            _charts = action.chart.map( formatchart );
+            _charts = action.chart.map( formatChart );
             _loadingError = null;
 
             TasksStore.emitChange();

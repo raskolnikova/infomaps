@@ -42,6 +42,16 @@ const chartActions = {
         .catch(err =>
             console.error(err)
         );
+    },
+
+    getChartById(chartId) {
+        api.getChartById(chartId)
+        .then(() =>
+            this.loadChart()
+        )
+        .catch(err =>
+            console.error(err)
+        );
     }
 };
 

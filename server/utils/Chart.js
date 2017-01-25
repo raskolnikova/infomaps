@@ -22,3 +22,7 @@ export function createChart(data){
 export function deleteChart(id){
   return Chart.findById(id).remove();
 }
+
+export function getChartById(id){
+  return Chart.findById(id);
+}

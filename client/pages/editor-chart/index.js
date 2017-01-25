@@ -41,6 +41,10 @@ export default class EditorChart extends Component {
         }
     }
 
+    handleGetChartById(id) {
+      return  ChartActions.getChartById(id);
+    }
+
     handleChartAdd(data) {
         if (data.buttonSave === 'button_on') {
             let chart = {
@@ -69,14 +73,6 @@ export default class EditorChart extends Component {
         }));
     }
 
-    // shouldComponentUpdate(nextProps, nextState){
-    //     this.setState({
-    //       buttonSave:'button_on'
-    //     })
-    //     console.log('ds');
-    //     return this.state.nameChart !== ''
-    //   }
-
     getColumn(data) {
         let columns = [];
         for (let key in data[0]) {
@@ -97,30 +93,42 @@ export default class EditorChart extends Component {
 
     }
 
-    render() {
-        return (
-            <div>
-                <NavEditorChart isChange={this.state.buttonSave} onChartAdd={(chart) => this.handleChartAdd(this.state)}/>
-                <div className='editor-wrap'>
-                    <div className="table-wrap" id='dev-table'>
-                        {this.state.showCostamization
-                            ? <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
-                            : <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>}
-                    </div>
-                    <div className="chart-wrap">
-                        <div className="select">
-                            <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameChart === ''
-                                ? "danger"
-                                : "success"}>
-                                <FormInput placeholder="Введите название диаграммы" onChange={(e) => this.updateNameChart(e)}/>
-                            </FormIconField>
+    isEmpty(obj) {
+        return Object.keys(obj).length === 0;
+    }
 
-                            <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
-                            <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
-                        </div>
+    getCostam() {
+        if (this.state.showCostamization && this.isEmpty(this.props.location.query))
+            return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
+        else if (!this.isEmpty(this.props.location.query)) {
+          //  console.log(this.handleGetChartById(this.props.location.query.id))
+            return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+        } else
+            return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+}
+
+render() {
+    return (
+        <div>
+            <NavEditorChart isChange={this.state.buttonSave} onChartAdd={(chart) => this.handleChartAdd(this.state)}/>
+            <div className='editor-wrap'>
+                <div className="table-wrap" id='dev-table'>
+                    {this.getCostam()}
+                </div>
+                <div className="chart-wrap">
+                    <div className="select">
+                        <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameChart === ''
+                            ? "danger"
+                            : "success"}>
+                            <FormInput placeholder="Введите название диаграммы" onChange={(e) => this.updateNameChart(e)}/>
+                        </FormIconField>
+
+                        <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
+                        <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
+}
 }

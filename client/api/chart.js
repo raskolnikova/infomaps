@@ -7,6 +7,10 @@ export default {
         return axios.get(`${apiPrefix}/charts`);
     },
 
+    getChartById(chartId) {
+        return axios.get(`${apiPrefix}/charts/${chartId}`);
+    },
+
     createChart(data) {
         return axios.post(`${apiPrefix}/charts`, data);
     },
@@ -14,4 +18,5 @@ export default {
     deleteChart(chartId) {
         return axios.delete(`${apiPrefix}/charts/${chartId}`);
     }
+
 }

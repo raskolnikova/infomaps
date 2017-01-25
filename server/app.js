@@ -37,7 +37,12 @@ app.get('/charts', (req, res) => {
   dbChart.listChart().then(data => res.send(data));
 });
 
+app.get('/charts/:id', (req, res) => {
+    dbChart.getChartById(req.params.id).then(data => res.send(data));
+});
+
 app.post('/charts', (req, res) => {
+  console.log('post')
   dbChart.createChart(req.body).then(data => res.send(data));
 });
 

@@ -3,12 +3,6 @@ import ItemDataset from '../item-dataset'
 
 export default class ListDatasets extends Component {
 
-  constructor() {
-      super()
-
-  }
-
-
     render() {
                 return (
                     <div className='list-chart'>

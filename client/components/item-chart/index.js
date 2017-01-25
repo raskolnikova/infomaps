@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router'
 
 import './index.less'
 
@@ -6,16 +7,16 @@ export default class ItemChart extends Component {
 
     getIcon(type) {
         switch (type) {
-            case 'bar-chart':
+            case 'Гистограмма':
                 return 'bar-chart'
                 break;
-            case 'line-chart':
+            case 'График':
                 return 'line-chart'
                 break;
-            case 'pie-chart':
+            case 'Круговая диаграмма':
                 return 'pie-chart'
                 break;
-            case 'area-chart':
+            case 'Кольцевая диаграмма':
                 return 'area-chart'
                 break;
             case 'bubule-chart':
@@ -28,17 +29,23 @@ export default class ItemChart extends Component {
                 return 'circle-o'
                 break;
             default:
-            return 'question'
-
+                return 'question'
         }
     }
 
     render() {
         return (
             <div key={this.props.id}>
-                <div className='button-chart' >
-                    <i className ={'fa fa-'+this.getIcon(this.props.type)+' fa-4x'}></i>
-                    <div className = 'inscription'>{this.props.name}</div>
+                <div className='button-chart'>
+                    <div className="delete_dataset">
+                        <i className='fa fa-times' onClick={this.props.onDelete}></i>
+                    </div>
+                    <i className ={'fa fa-' + this.getIcon(this.props.type) + ' fa-4x'}></i>
+
+                    <div className='inscription' onClick={this.props.onOpen}>
+                        {this.props.name}
+                    </div>
+
                 </div>
             </div>
         )
@@ -47,6 +54,6 @@ export default class ItemChart extends Component {
 }
 
 ItemChart.propTypes = {
-  name: React.PropTypes.string.isRequired,
-  type:  React.PropTypes.string.isRequired
+    name: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired
 };
