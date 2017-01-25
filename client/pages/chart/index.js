@@ -34,13 +34,7 @@ export default class Charts extends Component {
  }
 
  handleChartDelete(chart) {
-
      ChartActions.deleteChart(chart.id);
- }
-
- handleOpenChart(chart){
-   console.log(chart);
-   // this.props.createTable(dataset)
  }
 
     render() {
@@ -48,8 +42,8 @@ export default class Charts extends Component {
             <div>
                 <NavBar/>
                 <div className='charts-container'>
-                    <NewChart/>
-                    <ListChart charts={this.state.charts}  onChartDelete = {this.handleChartDelete} onOpenChart = {this.handleOpenChart}/>
+                    <NewChart clickNewChart ={()=>this.props.clickNewChart()}/>
+                    <ListChart charts={this.state.charts}  onChartDelete = {this.handleChartDelete} onOpenChart = { (data) => this.props.getDataChart(data)}/>
                 </div>
             </div>
         )

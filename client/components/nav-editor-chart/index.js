@@ -20,14 +20,14 @@ export default class NavEditorChart extends Component {
                         </div>
                     </div>
                 </Link>
-                <Link to='/charts'>
-                    <div className='button'>
+
+                    <div className='button' onClick= {()=>this.props.clickBackChart()}>
                         <div className='wrap-but'>
                             <i className="fa fa-bar-chart fa-3x"></i>
                             <div className='inscription'>К диаграммам</div>
                         </div>
                     </div>
-                </Link>
+
                 <a onClick={this.props.onChartAdd}>
                     <div className = {'button ' + this.props.isChange} >
                         <div className='wrap-but'>

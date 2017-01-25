@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import ContainerCharts from './containers/container-charts/index'
+
 import HomePage from './pages/homepage/index'
 import Charts from './pages/chart/index'
 import Maps from './pages/page-maps/index'
@@ -14,10 +16,12 @@ import {Route, IndexRoute} from 'react-router'
 export const routes = (
     <div>
         <Route path='/' component={HomePage}/>
-        <Route path='/charts' component={Charts}/>
+        <Route path='container-charts' >
+            <IndexRoute component={ContainerCharts} />
+            <Route path='editor-chart' component={EditorChart}/>
+            <Route path='editor-chart/:id' component={EditorChart}/>
+        </Route>
         <Route path='/page-maps' component={Maps}/>
-        <Route path='/editor-chart' component={EditorChart}/>
-        <Route path='/editor-chart/:id' component={EditorChart}/>
         <Route path='/editor-map' component={EditorMap}/>
         <Route path='/datasets' component={Datasets}/>
         <Route path='login' component={Login}/>

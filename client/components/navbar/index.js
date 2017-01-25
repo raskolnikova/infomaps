@@ -25,7 +25,7 @@ export default class NavBar extends Component {
                         </div>
                     </div>
                 </Link>
-                <Link to='/charts'>
+                <Link to='/container-charts'>
                     <div className='button'>
                         <div className='wrap-but'>
                             <i className="fa fa-bar-chart fa-3x"></i>

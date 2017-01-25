@@ -42,7 +42,7 @@ export default class EditorChart extends Component {
     }
 
     handleGetChartById(id) {
-      return  ChartActions.getChartById(id);
+        return ChartActions.getChartById(id);
     }
 
     handleChartAdd(data) {
@@ -73,10 +73,29 @@ export default class EditorChart extends Component {
         }));
     }
 
-    getColumn(data) {
+    getColumn(data, visibleColumns) {
+        let unvisibleColumns = [];
         let columns = [];
-        for (let key in data[0]) {
-            columns.push(key)
+
+        for (let key in data[0])
+            unvisibleColumns.push(key)
+
+        if (visibleColumns.length > 0) {
+
+            for (let i in data[0])
+                for (let j in visibleColumns) {
+                    if (i === visibleColumns[j]) {
+                        unvisibleColumns.pop(i)
+                    }
+                    break;
+                }
+
+            for (let key in visibleColumns)
+                columns.push(visibleColumns[key])
+
+            for (let key in unvisibleColumns)
+                columns.push({dataField: unvisibleColumns[key], visible: false})
+
         }
         return columns
     }
@@ -93,42 +112,49 @@ export default class EditorChart extends Component {
 
     }
 
-    isEmpty(obj) {
-        return Object.keys(obj).length === 0;
+    isEmptyObject(obj) {
+        for (let i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     getCostam() {
-        if (this.state.showCostamization && this.isEmpty(this.props.location.query))
-            return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
-        else if (!this.isEmpty(this.props.location.query)) {
-          //  console.log(this.handleGetChartById(this.props.location.query.id))
-            return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
-        } else
-            return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
-}
+        if (this.isEmptyObject(this.props.dataChart)) { //для создания новой диаграммы
+            if (this.state.showCostamization)
+                return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
+            else
+                return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+        } else { //для открытия уже существующей диаграммы
+            this.state.nameChart = this.props.dataChart.name
+            return <Table data={this.props.dataChart.file} columns={this.getColumn(this.props.dataChart.file, this.props.dataChart.visibleColumns)} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+        }
+    }
 
-render() {
-    return (
-        <div>
-            <NavEditorChart isChange={this.state.buttonSave} onChartAdd={(chart) => this.handleChartAdd(this.state)}/>
-            <div className='editor-wrap'>
-                <div className="table-wrap" id='dev-table'>
-                    {this.getCostam()}
-                </div>
-                <div className="chart-wrap">
-                    <div className="select">
-                        <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameChart === ''
-                            ? "danger"
-                            : "success"}>
-                            <FormInput placeholder="Введите название диаграммы" onChange={(e) => this.updateNameChart(e)}/>
-                        </FormIconField>
+    render() {
+        return (
+            <div>
+                <NavEditorChart isChange={this.state.buttonSave} onChartAdd={(chart) => this.handleChartAdd(this.state)} clickBackChart={() => this.props.clickBackChart()}/>
+                <div className='editor-wrap'>
+                    <div className="table-wrap" id='dev-table'>
+                        {this.getCostam()}
+                    </div>
+                    <div className="chart-wrap">
+                        <div className="select">
+                            <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameChart === ''
+                                ? "danger"
+                                : "success"}>
+                                <FormInput placeholder="Введите название диаграммы" value ={this.props.dataChart.name} onChange={(e) => this.updateNameChart(e)}/>
+                            </FormIconField>
 
-                        <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
-                        <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
+                            <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
+                            <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    )
-}
+        )
+    }
 }
