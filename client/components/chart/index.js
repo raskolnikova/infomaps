@@ -98,6 +98,12 @@ export default class ViewChart extends Component {
 
     componentWillReceiveProps(nextProps) {
         let count = nextProps.visibleColumns.length - 1
+        if(nextProps.isUpdateChart){
+          this.setState({data: nextProps.data,
+                        visibleColumns: nextProps.visibleColumns,
+                        xLabel: nextProps.visibleColumns[count],
+                        yLabel: nextProps.visibleColumns[0]})
+        } else
         if (nextProps.data !== this.state.data)
             this.setState({data: nextProps.data});
         else if(count > 0)
@@ -106,6 +112,7 @@ export default class ViewChart extends Component {
                           xLabel: nextProps.visibleColumns[count],
                           yLabel: nextProps.visibleColumns[0]})
             }
+
           }
 
     render() {

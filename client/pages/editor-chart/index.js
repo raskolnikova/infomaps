@@ -149,6 +149,7 @@ export default class EditorChart extends Component {
             this.state.nameChart = this.props.dataChart.name
             this.state.inputSelect = this.props.dataChart.type
             this.state.isUpdateChart = true;
+            this.state.data = this.props.dataChart.file;
             return <Table data={this.props.dataChart.file} columns={this.getColumn(this.props.dataChart.file, this.props.dataChart.visibleColumns)} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
         }
     }
@@ -170,7 +171,7 @@ export default class EditorChart extends Component {
                             </FormIconField>
 
                             <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/> {/*  посмотри почему не меняется тип графика при открытии диаграммы*/}
-                            <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
+                            <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect} isUpdateChart={this.state.isUpdateChart} />
                         </div>
                     </div>
                 </div>
