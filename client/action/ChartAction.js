@@ -44,8 +44,9 @@ const chartActions = {
         );
     },
 
-    getChartById(chartId) {
-        api.getChartById(chartId)
+    updateChart(chartId,chart) {
+      console.log(chart);
+        api.updateChart(chartId,chart)
         .then(() =>
             this.loadChart()
         )
@@ -53,6 +54,10 @@ const chartActions = {
             console.error(err)
         );
     }
+
+
+
+
 };
 
 export default chartActions;

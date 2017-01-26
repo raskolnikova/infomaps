@@ -4,25 +4,23 @@ import '../models/Chart'
 
 const Chart = mongoose.model('Chart');
 
-export function listChart(){
-  return Chart.find({});
+export function listChart() {
+    return Chart.find({});
 }
 
-export function createChart(data){
-  const chart = new Chart({
-    name: data.name,
-    file:data.file,
-    type:data.type,
-    createdAt:data.createdAt,
-    visibleColumns:data.visibleColumns
-  });
-  return chart.save();
+export function createChart(data) {
+    const chart = new Chart({name: data.name, file: data.file, type: data.type, createdAt: data.createdAt, visibleColumns: data.visibleColumns});
+    return chart.save();
 }
 
-export function deleteChart(id){
-  return Chart.findById(id).remove();
+export function deleteChart(id) {
+    return Chart.findById(id).remove();
 }
 
-export function getChartById(id){
-  return Chart.findById(id);
+export function updateChart(id, data) {
+    return Chart.findByIdAndUpdate(id, {
+        $set: {
+            name: data.name, file: data.file, type: data.type, createdAt: data.createdAt, visibleColumns: data.visibleColumns
+        }
+    });
 }

@@ -7,16 +7,16 @@ export default {
         return axios.get(`${apiPrefix}/charts`);
     },
 
-    getChartById(chartId) {
-        return axios.get(`${apiPrefix}/charts/${chartId}`);
-    },
-
     createChart(data) {
         return axios.post(`${apiPrefix}/charts`, data);
     },
 
     deleteChart(chartId) {
         return axios.delete(`${apiPrefix}/charts/${chartId}`);
+    },
+
+    updateChart(chartId,data) {
+        return axios.put(`${apiPrefix}/charts/${chartId}`,data);
     }
 
 }

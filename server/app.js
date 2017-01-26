@@ -42,7 +42,6 @@ app.get('/charts/:id', (req, res) => {
 });
 
 app.post('/charts', (req, res) => {
-  console.log('post')
   dbChart.createChart(req.body).then(data => res.send(data));
 });
 
@@ -50,6 +49,9 @@ app.delete('/charts/:id', (req, res) => {
     dbChart.deleteChart(req.params.id).then(data => res.send(data));
 });
 
+app.put('/charts/:id', (req, res) => {
+    dbChart.updateChart(req.params.id,req.body).then(data => res.send(data));
+});
 
 
 const server = app.listen(serverPort, () => {

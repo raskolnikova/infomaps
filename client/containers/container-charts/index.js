@@ -21,7 +21,7 @@ export default class ContainerCharts extends Component {
     }
 
     handleClickBackChart() {
-        this.setState({isOpenEditChart: false})
+        this.setState({isOpenEditChart: false, dataChart: {}})
     }
 
     render() {

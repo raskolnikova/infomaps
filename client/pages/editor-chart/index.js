@@ -31,13 +31,15 @@ export default class EditorChart extends Component {
     {
         super()
         this.state = {
+            idChart:'',
             inputSelect: "График",
             columns: [],
             showCostamization: true,
             data: [],
             visibleColumns: [],
             nameChart: '',
-            buttonSave: 'button_off'
+            buttonSave: 'button_off',
+            isUpdateChart: false
         }
     }
 
@@ -45,8 +47,27 @@ export default class EditorChart extends Component {
         return ChartActions.getChartById(id);
     }
 
-    handleChartAdd(data) {
-        if (data.buttonSave === 'button_on') {
+    handleChartUpdate() {
+      console.log('update');
+        if (this.state.buttonSave === 'button_on') {
+            let chart = {
+                type: this.state.inputSelect,
+                file: this.state.data,
+                visibleColumns: this.state.visibleColumns,
+                name: this.state.nameChart,
+                createdAt: new Date()
+            }
+            ChartActions.updateChart(this.state.idChart,chart);
+            this.setState({buttonSave: 'button_off'})
+
+        } else
+            console.error('error save');
+        }
+
+    handleChartAdd() {
+      console.log('create');
+
+        if (this.state.buttonSave === 'button_on') {
             let chart = {
                 type: this.state.inputSelect,
                 file: this.state.data,
@@ -62,7 +83,8 @@ export default class EditorChart extends Component {
         }
 
     updateSelect(option) {
-        this.setState({inputSelect: option});
+        console.log(option);
+        this.setState({inputSelect: option})
     }
 
     createTable(dataset) {
@@ -79,9 +101,7 @@ export default class EditorChart extends Component {
 
         for (let key in data[0])
             unvisibleColumns.push(key)
-
-        if (visibleColumns.length > 0) {
-
+        if (visibleColumns !== undefined) {
             for (let i in data[0])
                 for (let j in visibleColumns) {
                     if (i === visibleColumns[j]) {
@@ -89,15 +109,13 @@ export default class EditorChart extends Component {
                     }
                     break;
                 }
-
             for (let key in visibleColumns)
                 columns.push(visibleColumns[key])
-
             for (let key in unvisibleColumns)
                 columns.push({dataField: unvisibleColumns[key], visible: false})
-
-        }
-        return columns
+            return columns
+        } else
+            return unvisibleColumns
     }
 
     passDataFromTableToEditorChart(data, visibleColumns) {
@@ -109,7 +127,6 @@ export default class EditorChart extends Component {
             this.setState({nameChart: e.target.value, buttonSave: 'button_on'})
         else
             this.setState({nameChart: '', buttonSave: 'button_off'})
-
     }
 
     isEmptyObject(obj) {
@@ -128,7 +145,10 @@ export default class EditorChart extends Component {
             else
                 return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
         } else { //для открытия уже существующей диаграммы
+            this.state.idChart = this.props.dataChart.id
             this.state.nameChart = this.props.dataChart.name
+            this.state.inputSelect = this.props.dataChart.type
+            this.state.isUpdateChart = true;
             return <Table data={this.props.dataChart.file} columns={this.getColumn(this.props.dataChart.file, this.props.dataChart.visibleColumns)} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
         }
     }
@@ -136,7 +156,7 @@ export default class EditorChart extends Component {
     render() {
         return (
             <div>
-                <NavEditorChart isChange={this.state.buttonSave} onChartAdd={(chart) => this.handleChartAdd(this.state)} clickBackChart={() => this.props.clickBackChart()}/>
+                <NavEditorChart isChange={this.state.buttonSave} onChartAdd={this.state.isUpdateChart ? () => this.handleChartUpdate() : () => this.handleChartAdd()} clickBackChart={() => this.props.clickBackChart()}/>
                 <div className='editor-wrap'>
                     <div className="table-wrap" id='dev-table'>
                         {this.getCostam()}
@@ -149,7 +169,7 @@ export default class EditorChart extends Component {
                                 <FormInput placeholder="Введите название диаграммы" value ={this.props.dataChart.name} onChange={(e) => this.updateNameChart(e)}/>
                             </FormIconField>
 
-                            <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/>
+                            <FormSelect options={controlCharts} onChange={(e) => this.updateSelect(e)}/> {/*  посмотри почему не меняется тип графика при открытии диаграммы*/}
                             <Chart data={this.state.data} visibleColumns={this.state.visibleColumns} typeChart={this.state.inputSelect}/>
                         </div>
                     </div>

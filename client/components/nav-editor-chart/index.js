@@ -4,10 +4,6 @@ import {Link} from 'react-router'
 import './index.less'
 
 export default class NavEditorChart extends Component {
-    constructor() {
-        super()
-    }
-
 
     render() {
         return (
