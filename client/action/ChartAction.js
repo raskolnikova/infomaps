@@ -1,7 +1,7 @@
-import AppDispatcher from '../dispatcher/AppDispatcherChart';
-import Constants from '../constants/AppConstants';
-
+import AppDispatcher from '../dispatcher/AppDispatcherChart'
 import api from '../api/chart';
+import Constants from '../constants/AppConstants'
+
 
 const chartActions = {
     loadChart() {

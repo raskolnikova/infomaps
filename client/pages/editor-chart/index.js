@@ -48,7 +48,6 @@ export default class EditorChart extends Component {
     }
 
     handleChartUpdate() {
-      console.log('update');
         if (this.state.buttonSave === 'button_on') {
             let chart = {
                 type: this.state.inputSelect,
@@ -65,8 +64,6 @@ export default class EditorChart extends Component {
         }
 
     handleChartAdd() {
-      console.log('create');
-
         if (this.state.buttonSave === 'button_on') {
             let chart = {
                 type: this.state.inputSelect,
