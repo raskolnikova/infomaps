@@ -1,0 +1,15 @@
+/**
+ * DevExtreme (localization.js)
+ * Version: 16.2.4
+ * Build date: Tue Jan 17 2017
+ *
+ * Copyright (c) 2012 - 2017 Developer Express Inc. ALL RIGHTS RESERVED
+ * EULA: https://www.devexpress.com/Support/EULAs/DevExtreme.xml
+ */
+"use strict";
+exports.locale = require("./localization/core").locale;
+exports.loadMessages = require("./localization/message").load;
+exports.message = require("./localization/message");
+exports.number = require("./localization/number");
+exports.date = require("./localization/date");
+exports.currency = require("./localization/currency");
