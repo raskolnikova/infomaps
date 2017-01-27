@@ -1,7 +1,7 @@
 
 {
-    "apiPrefix": "http://localhost:8062",
-    "serverPort": "8062",
+    "apiPrefix": "http://localhost:8063",
+    "serverPort": "8063",
     "db":{
         "name": "infomaps",
         "host": "localhost",
