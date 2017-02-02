@@ -7,6 +7,7 @@ export default class ListDatasets extends Component {
                 return (
                     <div className='list-chart'>
                       {this.props.datasets.map(dataset => <ItemDataset
+                        key = {dataset.id}
                         name={dataset.name}
                         createdAt={dataset.createdAt}
                         onDelete={this.props.onDatasetDelete.bind(null,dataset)}

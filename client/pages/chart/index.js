@@ -48,8 +48,8 @@ export default class Charts extends Component {
             </div>
         )
 
-    }
 
+    }
     _onChange() {
         this.setState(getStateFromFlux())
     }

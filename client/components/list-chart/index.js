@@ -9,7 +9,7 @@ export default class ListChart extends Component {
         return (
             <div className='list-chart'>
                 {
-                  this.props.charts.map(chart => <ItemChart id={chart.id} name={chart.name} type={chart.type}
+                  this.props.charts.map(chart => <ItemChart key={chart.id} name={chart.name} type={chart.type}
                      onDelete={this.props.onChartDelete.bind(null,chart)}
                   onOpen={this.props.onOpenChart.bind(null,chart)}/>)
                 }

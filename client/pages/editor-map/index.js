@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import NavEditorChart from '../../components/nav-editor-chart/index'
 import Table from '../../components/table/index'
-import Map from '../../components/map/index'
+import Map from '../../components/choroplate-map/index'
 import CostamizationEmptyTable from '../../components/costamization_empty_table'
 import {FormSelect} from 'elemental'
 

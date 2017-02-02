@@ -17,7 +17,7 @@ const fullTime = day+"."+month+"."+year+" "+hours+":"+minutes
 
     render() {
         return (
-            <div className='button-chart'>
+            <div className='button-chart' >
               <div className="delete_dataset">
                 <i className ='fa fa-times' onClick={this.props.onDelete}></i>
                 </div>

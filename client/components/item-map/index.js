@@ -6,7 +6,7 @@ export default class ItemMap extends Component {
 
     render() {
         return (
-            <div key={this.props.id}>
+            <div>
                 <div className='button-map' >
                     <i className ='fa fa-map-marker fa-4x '></i>
                     <div className = 'inscription'>{this.props.name}</div>

@@ -35,7 +35,7 @@ export default class ItemChart extends Component {
 
     render() {
         return (
-            <div key={this.props.id}>
+            <div>
                 <div className='button-chart'>
                     <div className="delete_dataset">
                         <i className='fa fa-times' onClick={this.props.onDelete}></i>

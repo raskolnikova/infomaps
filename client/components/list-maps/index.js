@@ -9,7 +9,7 @@ export default class ListMaps extends Component {
         return (
             <div className='list-map'>
                 {
-                  this.props.maps.map(map => <ItemMap id={map.id} name={map.name} />)
+                  this.props.maps.map(map => <ItemMap key={map.id} name={map.name} />)
                 }
             </div>
         )

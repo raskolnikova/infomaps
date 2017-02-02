@@ -4,11 +4,6 @@ import './index.less'
 
 export default class NavBar extends Component {
 
-    constructor() {
-        super()
-
-    }
-
     handleDataSetAdd(dataSet) {
            DataSetActions.createDataSet(dataset);
        }
@@ -17,10 +12,18 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="flex-container">
+              <Link to='/'>
+                  <div className='button'>
+                      <div className='wrap-but'>
+                          <i className="fa fa-home fa-3x"></i>
+                          <div className='inscription'>На главную</div>
+                      </div>
+                  </div>
+              </Link>
                 <Link to='/datasets'>
                     <div className='button'>
                         <div className='wrap-but'>
-                            <i className="fa fa-file-text fa-3x"></i>
+                            <i className="fa fa-files-o fa-3x"></i>
                             <div className='inscription'>Наборы данных</div>
                         </div>
                     </div>
@@ -29,15 +32,15 @@ export default class NavBar extends Component {
                     <div className='button'>
                         <div className='wrap-but'>
                             <i className="fa fa-bar-chart fa-3x"></i>
-                            <div className='inscription'>Диаграммы</div>
+                            <div className='inscription'>Редактор диаграмм</div>
                         </div>
                     </div>
                 </Link>
                 <Link to='/page-maps'>
                     <div className='button'>
                         <div className='wrap-but'>
-                            <i className="fa fa-upload fa-3x"></i>
-                            <div className='inscription'>Карта</div>
+                            <i className="fa fa-map-marker fa-3x"></i>
+                            <div className='inscription'>Редактор карт</div>
                         </div>
                     </div>
                 </Link>
