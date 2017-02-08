@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 
 import './index.less'
 
+
 export default class ItemChart extends Component {
 
     getIcon(type) {
@@ -34,6 +35,7 @@ export default class ItemChart extends Component {
     }
 
     render() {
+
         return (
             <div>
                 <div className='button-chart'>
@@ -56,4 +58,5 @@ export default class ItemChart extends Component {
 ItemChart.propTypes = {
     name: React.PropTypes.string.isRequired,
     type: React.PropTypes.string.isRequired
+
 };

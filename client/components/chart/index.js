@@ -118,7 +118,8 @@ export default class ViewChart extends Component {
     render() {
         return (
             <div>
-                {this.getChart(this.props.typeChart)}
+                {console.log(this.getChart(this.props.typeChart)),
+                  this.getChart(this.props.typeChart)}
             </div>
         )
     }
