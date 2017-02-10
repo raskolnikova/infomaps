@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router'
 import {Modal, ModalHeader, ModalBody, ModalFooter, Button} from 'elemental'
 import FileInput from 'react-simple-file-input'
+import CSVConvertor from 'babyparse'
 import './index.less'
 
 // function fileIsIncorrectFiletype(file) {
@@ -18,7 +19,7 @@ export default class Import extends Component {
         this.state = {
             modalIsOpen: false,
             file: {},
-              cancelButtonClicked: false,
+            cancelButtonClicked: false,
             progressBarVisible: false,
             progressPercent: 0
         }
@@ -34,13 +35,31 @@ export default class Import extends Component {
     }
 
     handleDatasetAdd() {
-        const Dataset = {
-            name: this.state.file.name,
-            file: this.state.fileContents,
-            createdAt: new Date()
+        let file,
+            Dataset,
+            name = this.state.file.name;
+        if (name.search(/(.csv)$/g) !== -1) {
+            file = CSVConvertor.parse(this.state.fileContents, {
+                header: true,
+                dynamicTyping: true,
+                comments: "#",
+                skipEmptyLines: true,
+                quoteChar: 'auto'
+            })
+            Dataset = this.getDataset(name, JSON.stringify(file.data))
+            console.log(file);
+            this.props.onDatasetAdd(Dataset);
+            this.modalOpen()
+        } else if (name.search(/(.json)$/g) !== -1) {
+            Dataset = this.getDataset(name, this.state.fileContents)
+            this.props.onDatasetAdd(Dataset);
+            this.modalOpen()
+        } else
+            console.error('неподдерживаемый формат данных');
         }
-        this.props.onDatasetAdd(Dataset);
-      this.modalOpen()
+
+    getDataset(name, file) {
+        return {name: name, file: file, createdAt: new Date()}
     }
 
     modalOpen() {
@@ -88,7 +107,7 @@ export default class Import extends Component {
                 <Modal isOpen={this.state.modalIsOpen} onCancel={this.modalOpen} backdropClosesModal>
                     <ModalHeader text="Lots of text to show scroll behavior" showCloseButton onClose={this.modalOpen}/>
                     <ModalBody>
-                        <FileInput readAs='text' onLoadStart={this.showProgressBar} onLoad={this.handleFileSelected} onProgress={this.updateProgressBar}  onCancel={this.showInvalidFileTypeMessage} abortIf={this.cancelButtonClicked} onAbort={this.resetCancelButtonClicked}>
+                        <FileInput readAs='text' onLoadStart={this.showProgressBar} onLoad={this.handleFileSelected} onProgress={this.updateProgressBar} onCancel={this.showInvalidFileTypeMessage} abortIf={this.cancelButtonClicked} onAbort={this.resetCancelButtonClicked}>
                             Нажмите здесь для выбора файла
                         </FileInput>
                     </ModalBody>

@@ -16,16 +16,13 @@ export default class Table extends Component {
         var column = this.props.columns
         var store = this.props.data;
         var self = this;
-
         $(function() {
             $("#gridContainer").dxDataGrid({
                 dataSource: {
                     store: store
                 },
+
                 columns: column,
-                paging: {
-                    pageSize: 20
-                },
                 columnAutoWidth: true,
                 editing: {
                     mode: 'batch',
@@ -39,6 +36,10 @@ export default class Table extends Component {
                     width: 400,
                     emptyPanelText: 'Перетащите сюда ненужные столбцы',
                     mode: 'select'
+                },
+                paging: {
+                  enabled:false
+                  
                 },
                 onRowUpdated: function(info) {
                     self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());

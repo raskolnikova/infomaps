@@ -7,8 +7,8 @@ import {serverPort} from '../etc/config.json'
 import * as connection from './utils/DataBaseUtils'
 
 import * as dbDataSet from './utils/DataSet';
-
 import * as dbChart from './utils/Chart';
+import * as dbMap from './utils/Map';
 
 
 connection.setUpConnection();
@@ -51,6 +51,27 @@ app.delete('/charts/:id', (req, res) => {
 
 app.put('/charts/:id', (req, res) => {
     dbChart.updateChart(req.params.id,req.body).then(data => res.send(data));
+});
+
+
+app.get('/maps', (req, res) => {
+  dbMap.listMap().then(data => res.send(data));
+});
+
+app.get('/maps/:id', (req, res) => {
+    dbMap.getMapById(req.params.id).then(data => res.send(data));
+});
+
+app.post('/maps', (req, res) => {
+  dbMap.createMap(req.body).then(data => res.send(data));
+});
+
+app.delete('/maps/:id', (req, res) => {
+    dbMap.deleteMap(req.params.id).then(data => res.send(data));
+});
+
+app.put('/maps/:id', (req, res) => {
+    dbMap.updateMap(req.params.id,req.body).then(data => res.send(data));
 });
 
 

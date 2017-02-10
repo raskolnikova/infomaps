@@ -36,7 +36,7 @@ export default class NavBar extends Component {
                         </div>
                     </div>
                 </Link>
-                <Link to='/page-maps'>
+                <Link to='/container-map'>
                     <div className='button'>
                         <div className='wrap-but'>
                             <i className="fa fa-map-marker fa-3x"></i>

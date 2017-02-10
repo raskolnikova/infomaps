@@ -80,7 +80,6 @@ export default class EditorChart extends Component {
         }
 
     updateSelect(option) {
-        console.log(option);
         this.setState({inputSelect: option})
     }
 

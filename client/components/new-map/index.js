@@ -6,12 +6,12 @@ import './index.less'
 export default class NewMap extends Component {
     render() {
         return (
-            <Link to='/editor-map'>
-                <div className='button-new-chart'>
+
+                <div className='button-new-chart' onClick = {() => this.props.clickNewMap()}>
                     <i className="fa fa-plus fa-4x"></i>
                     <div className='inscription'>Cоздать новую карту</div>
                 </div>
-            </Link>
+
         )
 
     }

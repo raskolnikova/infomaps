@@ -6,5 +6,8 @@ export default keyMirror({
     LOAD_DATASET_FAIL: null,
     LOAD_CHART_REQUEST: null,
     LOAD_CHART_SUCCESS: null,
-    LOAD_CHART_FAIL: null
+    LOAD_CHART_FAIL: null,
+    LOAD_MAP_REQUEST: null,
+    LOAD_MAP_SUCCESS: null,
+    LOAD_MAP_FAIL: null
 });

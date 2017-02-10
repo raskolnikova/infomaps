@@ -7,7 +7,8 @@ import '../../../node_modules/leaflet/dist/leaflet.css'
 export default class Map extends Component {
 
     componentDidMount() {
-        let map = L.map("map").setView([
+
+        let map = L.map(this.props.id_map).setView([
             51.7, 36.6
         ], 2);
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
@@ -129,7 +130,7 @@ export default class Map extends Component {
     render() {
         return (
             <div>
-                <div id="map"></div>
+                <div id={this.props.id_map}></div>
             </div>
         )
 

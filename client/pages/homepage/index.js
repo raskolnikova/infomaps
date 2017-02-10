@@ -68,7 +68,7 @@ export default class HomePage extends Component {
                     ? <SetElements charts={this.state.charts} handleChangeSetElements={(typeList) => this.handleChangeSetElements(typeList)}/>
                   : <div className='list-elements'>{this.getListElements(this.state.typeList)}</div>
 }
-                <Map/>
+                <Map id_map = "map"/>
             </div>
         )
     }

@@ -8,6 +8,9 @@ module.exports = {
         filename: "bundle.js"
     },
     plugins: [new webpack.ProvidePlugin({$: "jquery/dist/jquery.min.js", jQuery: "jquery/dist/jquery.min.js", "window.jQuery": "jquery/dist/jquery.min.js"})],
+    node: {
+      fs: "empty"
+    },
     module: {
         loaders: [
             {
