@@ -41,6 +41,7 @@ export default class Table extends Component {
                   enabled:false
                   
                 },
+                sorting: { mode: 'multiple' },
                 onRowUpdated: function(info) {
                     self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());
                 },

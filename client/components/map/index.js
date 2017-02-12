@@ -1,10 +1,22 @@
 import React, {Component} from 'react';
-import statesData from '../../../geodata/us_states.json'
+import USMap from '../../../geodata/countries/us_states.json'
+import WorldMap from '../../../geodata/countries/World.json'
+import RUSMap from '../../../geodata/countries/russia.json'
 import L from 'leaflet'
 import './index.less'
 import '../../../node_modules/leaflet/dist/leaflet.css'
 
 export default class Map extends Component {
+
+    constructor(){
+        super()
+        this.state={
+            geoJSONMap: USMap,
+            geoJSON:{},
+             map: {},
+             info: {}
+        }
+    }
 
     componentDidMount() {
 
@@ -13,56 +25,69 @@ export default class Map extends Component {
         ], 2);
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
-        let geoJSON = L.geoJSON(statesData, {
+        let geoJSON = L.geoJSON(this.state.geoJSONMap, {
             style: (feature) => this.getStyle(feature),
             onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
         }).addTo(map)
 
-        let info = L.control();
+        // let info = L.control();
 
-        info.onAdd = function(map) {
-            this._div = L.DomUtil.create('div', 'info');
-            this.update();
-            return this._div;
-        };
+        // info.onAdd = function(map) {
+        //     this._div = L.DomUtil.create('div', 'info');
+        //     this.update();
+        //     return this._div;
+        // };
 
-        info.update = function(props) {
-            this._div.innerHTML = '<h4>US Population Density</h4>' + (props
-                ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-                : 'Hover over a state');
-        };
-        info.addTo(map);
+        // info.update = function(props) {
+        //     this._div.innerHTML = '<h4>US Population Density</h4>' + (props
+        //         ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+        //         : 'Hover over a state');
+        // };
+        // info.addTo(map);
 
-        let legend = L.control({position: 'bottomright'});
+        // let legend = L.control({position: 'bottomright'});
 
-        let getColor = this.getColor
+        // let getColor = this.getColor
 
-        legend.onAdd = function(map) {
-            let div = L.DomUtil.create('div', 'info legend'),
-                grades = [
-                    0,
-                    10,
-                    20,
-                    50,
-                    100,
-                    200,
-                    500,
-                    1000
-                ],
-                labels = [];
-            for (var i = 0; i < grades.length; i++) {
-                div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
-                    ? '&ndash;' + grades[i + 1] + '<br>'
-                    : '+');
-            }
+        // legend.onAdd = function(map) {
+        //     let div = L.DomUtil.create('div', 'info legend'),
+        //         grades = [
+        //             0,
+        //             10,
+        //             20,
+        //             50,
+        //             100,
+        //             200,
+        //             500,
+        //             1000
+        //         ],
+        //         labels = [];
+        //     for (var i = 0; i < grades.length; i++) {
+        //         div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
+        //             ? '&ndash;' + grades[i + 1] + '<br>'
+        //             : '+');
+        //     }
 
-            return div;
-        };
+        //     return div;
+        // };
 
-        legend.addTo(map);
+        // legend.addTo(map);
 
-        this.setState({geoJSON: geoJSON, map: map, info: info})
+        this.setState({geoJSON:geoJSON,map:map})
     }
+
+     componentWillReceiveProps(nextProps) {
+         let map = this.state.map.removeLayer(this.state.geoJSON)
+
+      let geoJSON = L.geoJSON(this.getTypeMap(nextProps.typeMap), {
+            style: (feature) => this.getStyle(feature),
+            onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
+        }).addTo(map)
+
+         this.setState({geoJSONMap:this.getTypeMap(nextProps.typeMap),
+           map:map,geoJSON:geoJSON})
+     }
+
 
     getColor(d) {
         return d > 1000
@@ -127,6 +152,18 @@ export default class Map extends Component {
         });
     }
 
+getTypeMap(typeChart){
+     switch (typeChart) {
+            case 'Карта мира':
+                return WorldMap
+            case 'Карта США':
+                return USMap
+            case 'Карта России':
+                 return RUSMap
+     }  
+}
+
+    
     render() {
         return (
             <div>

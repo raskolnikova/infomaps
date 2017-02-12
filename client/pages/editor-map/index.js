@@ -10,12 +10,13 @@ import MapActions from '../../action/MapAction.js'
 import './index.less'
 
 const controlMaps = [
+     {
+        label: 'Карта США',
+        value: 'Карта США'
+    },
     {
         label: 'Карта мира',
         value: 'Карта мира'
-    }, {
-        label: 'Карта США',
-        value: 'Карта США'
     }, {
         label: 'Карта России',
         value: 'Карта России'
@@ -166,7 +167,7 @@ export default class EditorMap extends Component {
                             <FormInput placeholder="Введите название диаграммы" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
                         </FormIconField>
 
-                        <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/> {/*  посмотри почему не меняется тип графика при открытии диаграммы*/}
+                        <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/> 
                         <Map id_map="map_edit" data={this.state.dataFile} visibleColumns={this.state.visibleColumns} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
                     </div>
                 </div>
