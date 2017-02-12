@@ -43,10 +43,10 @@ export default class Table extends Component {
                 },
                 sorting: { mode: 'multiple' },
                 onRowUpdated: function(info) {
-                    self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());
+                    self.props.passDataFromTableToEditor(store, self.getVisibleColumns());
                 },
                 onContentReady: function(info) {
-                    self.props.passDataFromTableToEditorChart(store, self.getVisibleColumns());
+                    self.props.passDataFromTableToEditor(store, self.getVisibleColumns());
                 }
             });
         });

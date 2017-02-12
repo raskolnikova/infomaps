@@ -11,7 +11,7 @@ export default class Map extends Component {
     constructor(){
         super()
         this.state={
-            geoJSONMap: USMap,
+            geoJSONMap: WorldMap,
             geoJSON:{},
              map: {},
              info: {}
@@ -30,54 +30,65 @@ export default class Map extends Component {
             onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
         }).addTo(map)
 
-        // let info = L.control();
+         let info = L.control();
 
-        // info.onAdd = function(map) {
-        //     this._div = L.DomUtil.create('div', 'info');
-        //     this.update();
-        //     return this._div;
-        // };
+        info.onAdd = (map) => this.infoAdd(map)
 
-        // info.update = function(props) {
-        //     this._div.innerHTML = '<h4>US Population Density</h4>' + (props
-        //         ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-        //         : 'Hover over a state');
-        // };
-        // info.addTo(map);
+        info.update = (props) => this.infoUpdate(props) 
+      
+        info.addTo(map);
 
-        // let legend = L.control({position: 'bottomright'});
+        let legend = L.control({position: 'bottomright'});
 
-        // let getColor = this.getColor
+        
 
-        // legend.onAdd = function(map) {
-        //     let div = L.DomUtil.create('div', 'info legend'),
-        //         grades = [
-        //             0,
-        //             10,
-        //             20,
-        //             50,
-        //             100,
-        //             200,
-        //             500,
-        //             1000
-        //         ],
-        //         labels = [];
-        //     for (var i = 0; i < grades.length; i++) {
-        //         div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
-        //             ? '&ndash;' + grades[i + 1] + '<br>'
-        //             : '+');
-        //     }
+        legend.onAdd = () => this.legendAdd(this.getColor)
+        legend.addTo(map);
 
-        //     return div;
-        // };
+        this.setState({geoJSON:geoJSON,map:map,info:info})
+    }
 
-        // legend.addTo(map);
+infoAdd(map){
+     this._div = L.DomUtil.create('div', 'info');
+            this.infoUpdate();
+            return this._div;
+}
 
-        this.setState({geoJSON:geoJSON,map:map})
+infoUpdate(props){
+ this._div.innerHTML = '<h4>US Population Density</h4>' + (props
+                ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+                : 'Наведите на область');
+}
+
+    legendAdd(getColor){
+         let div = L.DomUtil.create('div', 'info legend'),
+                grades = [
+                    0,
+                    10,
+                    20,
+                    50,
+                    100,
+                    200,
+                    500,
+                    1000
+                ],
+                labels = [];
+            for (var i = 0; i < grades.length; i++) {
+                div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
+                    ? '&ndash;' + grades[i + 1] + '<br>'
+                    : '+');
+            }
+
+            return div;
     }
 
      componentWillReceiveProps(nextProps) {
-         let map = this.state.map.removeLayer(this.state.geoJSON)
+        this.updateTypeMap(nextProps)
+           
+     }
+
+     updateTypeMap(nextProps){
+     let map = this.state.map.removeLayer(this.state.geoJSON)
 
       let geoJSON = L.geoJSON(this.getTypeMap(nextProps.typeMap), {
             style: (feature) => this.getStyle(feature),

@@ -3,7 +3,7 @@ import NavEditorMap from '../../components/nav-editor-map/index'
 import Table from '../../components/table/index'
 import Map from '../../components/map/index'
 import CostamizationEmptyTable from '../../components/costamization_empty_table'
-import {FormSelect, FormInput, FormIconField} from 'elemental'
+import {FormSelect, FormInput, FormIconField,Button} from 'elemental'
 
 import MapActions from '../../action/MapAction.js'
 
@@ -11,13 +11,14 @@ import './index.less'
 
 const controlMaps = [
      {
+        label: 'Карта мира',
+        value: 'Карта мира'
+    },
+     {
         label: 'Карта США',
         value: 'Карта США'
     },
     {
-        label: 'Карта мира',
-        value: 'Карта мира'
-    }, {
         label: 'Карта России',
         value: 'Карта России'
     }
@@ -30,14 +31,15 @@ export default class EditorMap extends Component {
         super()
         this.state = {
             idMap: '',
-            inputSelect: "Карта мира",
+            inputSelect: "Карта США",
             columns: [],
             showCostamization: true,
             data: [],
             visibleColumns: [],
             nameMap: '',
             buttonSave: 'button_off',
-            isUpdateMap: false
+            isUpdateMap: false,
+            isAddNotice:false
         }
     }
 
@@ -85,7 +87,7 @@ export default class EditorMap extends Component {
 
     createTable(dataset) {
         this.setState(prevState => ({
-            dataFile: JSON.parse(dataset.file),
+            data: JSON.parse(dataset.file),
             showCostamization: !prevState.showCostamization,
             columns: this.getColumn(JSON.parse(dataset.file))
         }));
@@ -135,20 +137,24 @@ export default class EditorMap extends Component {
             if (this.state.showCostamization)
                 return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
             else
-                return <Table data={this.state.dataFile} columns={this.state.columns} passDataFromTableToEditorMap={(dataFile, visibleColumns) => this.passDataFromTableToEditorMap(dataFile, visibleColumns)}/>
+                return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
         } else { //для открытия уже существующей карты
             this.state.idMap = this.props.dataMap.id
             this.state.nameMap = this.props.dataMap.name
             this.state.inputSelect = this.props.dataMap.type
             this.state.isUpdateMap = true;
-            this.state.dataFile = this.props.dataMap.dataFile;
-            return <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditorMap={(dataFile, visibleColumns) => this.passDataFromTableToEditorMap(dataFile, visibleColumns)}/>
+            this.state.data = this.props.dataMap.dataFile;
+            return <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
         }
     }
 
-    passDataFromTableToEditorMap(data, visibleColumns) {
+    passDataFromTableToEditor(data, visibleColumns) {
         this.setState({data: data, visibleColumns: visibleColumns})
     }
+
+handleAddNotice(){
+    this.setState({isAddNotice:true})
+}
 
     render() {
         return (
@@ -161,14 +167,17 @@ export default class EditorMap extends Component {
                         {this.getCostam()}
                     </div>
                     <div className="select">
+                        <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/> 
                         <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameMap === ''
                             ? "danger"
                             : "success"}>
                             <FormInput placeholder="Введите название диаграммы" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
                         </FormIconField>
-
-                        <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/> 
-                        <Map id_map="map_edit" data={this.state.dataFile} visibleColumns={this.state.visibleColumns} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
+                        { this.state.isAddNotice?
+                            <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
+                           : <Button type="success" onClick={()=> this.handleAddNotice()}>Добавить примечание</Button>
+                        }
+                        <Map id_map="map_edit" data={this.state.data} visibleColumns={this.state.visibleColumns} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
                     </div>
                 </div>
             </div>

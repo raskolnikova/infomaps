@@ -114,7 +114,7 @@ export default class EditorChart extends Component {
             return unvisibleColumns
     }
 
-    passDataFromTableToEditorChart(data, visibleColumns) {
+    passDataFromTableToEditor(data, visibleColumns) {
         this.setState({data: data, visibleColumns: visibleColumns})
     }
 
@@ -139,14 +139,14 @@ export default class EditorChart extends Component {
             if (this.state.showCostamization)
                 return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
             else
-                return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+                return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(data, visibleColumns) => this.passDataFromTableToEditor(data, visibleColumns)}/>
         } else { //для открытия уже существующей диаграммы
             this.state.idChart = this.props.dataChart.id
             this.state.nameChart = this.props.dataChart.name
             this.state.inputSelect = this.props.dataChart.type
             this.state.isUpdateChart = true;
             this.state.data = this.props.dataChart.file;
-            return <Table data={this.props.dataChart.file} columns={this.getColumn(this.props.dataChart.file, this.props.dataChart.visibleColumns)} passDataFromTableToEditorChart={(data, visibleColumns) => this.passDataFromTableToEditorChart(data, visibleColumns)}/>
+            return <Table data={this.props.dataChart.file} columns={this.getColumn(this.props.dataChart.file, this.props.dataChart.visibleColumns)} passDataFromTableToEditor={(data, visibleColumns) => this.passDataFromTableToEditor(data, visibleColumns)}/>
         }
     }
 
