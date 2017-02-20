@@ -34,12 +34,12 @@ export default class Table extends Component {
                     enabled: true,
                     height: 300,
                     width: 400,
-                    emptyPanelText: 'Перетащите сюда ненужные столбцы',
+                    emptyPanelText: 'Снимите галочку с ненужных столбцов',
                     mode: 'select'
                 },
                 paging: {
                   enabled:false
-                  
+
                 },
                 sorting: { mode: 'multiple' },
                 onRowUpdated: function(info) {

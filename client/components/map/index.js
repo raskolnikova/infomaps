@@ -8,18 +8,19 @@ import '../../../node_modules/leaflet/dist/leaflet.css'
 
 export default class Map extends Component {
 
-    constructor(){
+    constructor() {
         super()
-        this.state={
+        this.state = {
+            typeMap: 'Карта мира',
             geoJSONMap: WorldMap,
-            geoJSON:{},
-             map: {},
-             info: {}
+            geoJSON: {},
+            map: {},
+            info: {},
+            visibleColumns: []
         }
     }
 
     componentDidMount() {
-
         let map = L.map(this.props.id_map).setView([
             51.7, 36.6
         ], 2);
@@ -30,88 +31,106 @@ export default class Map extends Component {
             onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
         }).addTo(map)
 
-         let info = L.control();
-
+        let info = L.control();
         info.onAdd = (map) => this.infoAdd(map)
-
-        info.update = (props) => this.infoUpdate(props) 
-      
+        info.update = (props) => this.infoUpdate(props)
         info.addTo(map);
 
         let legend = L.control({position: 'bottomright'});
-
-        
-
         legend.onAdd = () => this.legendAdd(this.getColor)
         legend.addTo(map);
 
-        this.setState({geoJSON:geoJSON,map:map,info:info})
+        this.setState({geoJSON: geoJSON, map: map, info: info})
     }
 
-infoAdd(map){
-     this._div = L.DomUtil.create('div', 'info');
-            this.infoUpdate();
-            return this._div;
-}
+    infoAdd(map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.infoUpdate();
+        return this._div;
+    }
 
-infoUpdate(props){
- this._div.innerHTML = '<h4>US Population Density</h4>' + (props
-                ? '<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
-                : 'Наведите на область');
-}
+    infoUpdate(props) {
+        this._div.innerHTML = '<h4>Примечание</h4>' + (props
+            ? '<b>' + props.NAME_LONG + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+            : 'Наведите на область');
+    }
 
-    legendAdd(getColor){
-         let div = L.DomUtil.create('div', 'info legend'),
-                grades = [
-                    0,
-                    10,
-                    20,
-                    50,
-                    100,
-                    200,
-                    500,
-                    1000
-                ],
-                labels = [];
-            for (var i = 0; i < grades.length; i++) {
-                div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
-                    ? '&ndash;' + grades[i + 1] + '<br>'
-                    : '+');
+    legendAdd(getColor) {
+        let div = L.DomUtil.create('div', 'info legend'),
+            grades = [
+                0,
+                10,
+                20,
+                50,
+                100,
+                200,
+                500,
+                1000
+            ],
+            labels = [];
+        for (var i = 0; i < grades.length; i++) {
+            div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
+                ? '&ndash;' + grades[i + 1] + '<br>'
+                : '+');
+        }
+        return div;
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.updateMap(nextProps.typeMap, nextProps.dataForMap)
+    }
+
+    updateMap(typeMap, dataForMap) {
+        let map = {},
+            data =  dataForMap.data
+
+        if (typeMap !== this.state.typeMap)
+            map = this.state.map.removeLayer(this.state.geoJSON)
+        else
+            map = this.state.map
+
+        if (!this.isEmptyObject(data)) {
+            L.geoJSON(this.getTypeMap(typeMap)).eachLayer(function(featureClass) {
+                for (let i = 0; i < Object.keys(data).length; i++)
+                    if (featureClass.feature.properties.ISO_A3 === data[i][dataForMap.ISO3Column])
+                        featureClass.feature.properties[dataForMap.visibleColumns[0]] = data[i][dataForMap.visibleColumns[0]];
+                    }
+                )
+
+            this.setState({visibleColumns: dataForMap.visibleColumns})
+
+            let geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
+                style: (feature) => this.getStyle(feature),
+                onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
+            }).addTo(map)
+            this.setState({geoJSON: geoJSON})
+        }
+
+        this.setState({typeMap: typeMap, geoJSONMap: this.getTypeMap(typeMap), map: map})
+
+    }
+
+    isEmptyObject(obj) {
+        for (let i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                return false;
             }
-
-            return div;
+        }
+        return true;
     }
-
-     componentWillReceiveProps(nextProps) {
-        this.updateTypeMap(nextProps)
-           
-     }
-
-     updateTypeMap(nextProps){
-     let map = this.state.map.removeLayer(this.state.geoJSON)
-
-      let geoJSON = L.geoJSON(this.getTypeMap(nextProps.typeMap), {
-            style: (feature) => this.getStyle(feature),
-            onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
-        }).addTo(map)
-
-         this.setState({geoJSONMap:this.getTypeMap(nextProps.typeMap),
-           map:map,geoJSON:geoJSON})
-     }
-
 
     getColor(d) {
-        return d > 1000
+        return d > 10000000
             ? '#800026'
-            : d > 500
+            : d > 1000000
                 ? '#BD0026'
-                : d > 200
+                : d > 100000
                     ? '#E31A1C'
-                    : d > 100
+                    : d > 10000
                         ? '#FC4E2A'
-                        : d > 50
+                        : d > 1000
                             ? '#FD8D3C'
-                            : d > 20
+                            : d > 100
                                 ? '#FEB24C'
                                 : d > 10
                                     ? '#FED976'
@@ -120,7 +139,7 @@ infoUpdate(props){
 
     getStyle(feature) {
         return {
-            fillColor: this.getColor(feature.properties.density),
+            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]]),
             weight: 2,
             opacity: 1,
             color: 'white',
@@ -163,18 +182,17 @@ infoUpdate(props){
         });
     }
 
-getTypeMap(typeChart){
-     switch (typeChart) {
+    getTypeMap(typeChart) {
+        switch (typeChart) {
             case 'Карта мира':
                 return WorldMap
             case 'Карта США':
                 return USMap
             case 'Карта России':
-                 return RUSMap
-     }  
-}
+                return RUSMap
+        }
+    }
 
-    
     render() {
         return (
             <div>

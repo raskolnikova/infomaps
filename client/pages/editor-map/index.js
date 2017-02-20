@@ -3,22 +3,21 @@ import NavEditorMap from '../../components/nav-editor-map/index'
 import Table from '../../components/table/index'
 import Map from '../../components/map/index'
 import CostamizationEmptyTable from '../../components/costamization_empty_table'
-import {FormSelect, FormInput, FormIconField,Button} from 'elemental'
+import AdditionalCostamMap from '../../components/additional_costam_map'
+import {FormSelect, FormInput, FormIconField, Button} from 'elemental'
 
 import MapActions from '../../action/MapAction.js'
 
 import './index.less'
 
 const controlMaps = [
-     {
+    {
         label: 'Карта мира',
         value: 'Карта мира'
-    },
-     {
+    }, {
         label: 'Карта США',
         value: 'Карта США'
-    },
-    {
+    }, {
         label: 'Карта России',
         value: 'Карта России'
     }
@@ -31,15 +30,21 @@ export default class EditorMap extends Component {
         super()
         this.state = {
             idMap: '',
-            inputSelect: "Карта США",
+            inputSelect: "Карта мира",
             columns: [],
             showCostamization: true,
             data: [],
             visibleColumns: [],
+            ISO3Column: '',
             nameMap: '',
             buttonSave: 'button_off',
             isUpdateMap: false,
-            isAddNotice:false
+            isAddNotice: false,
+            dataForMap: {
+              'ISO3Column':'',
+              'data': [],
+              'visibleColumns':[]
+            }
         }
     }
 
@@ -72,7 +77,7 @@ export default class EditorMap extends Component {
                 visibleColumns: this.state.visibleColumns,
                 name: this.state.nameMap,
                 colorSchema: [],
-                createdAt: new Date()
+                createdAt: new Date(),
             }
             MapActions.createMap(map);
             this.setState({buttonSave: 'button_off'})
@@ -137,14 +142,20 @@ export default class EditorMap extends Component {
             if (this.state.showCostamization)
                 return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
             else
-                return <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+                return <div>
+                    <AdditionalCostamMap handleColoringMap={() => this.handleColoringMap()} updateColumnName={(name) => this.updateColumnName(name)}/>
+                    <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+                </div>
         } else { //для открытия уже существующей карты
             this.state.idMap = this.props.dataMap.id
             this.state.nameMap = this.props.dataMap.name
             this.state.inputSelect = this.props.dataMap.type
             this.state.isUpdateMap = true;
             this.state.data = this.props.dataMap.dataFile;
-            return <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+            return <div>
+                <AdditionalCostamMap handleColoringMap={() => this.handleColoringMap()} updateColumnName={(name) => this.updateColumnName(name)}/>
+                <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+            </div>
         }
     }
 
@@ -152,35 +163,49 @@ export default class EditorMap extends Component {
         this.setState({data: data, visibleColumns: visibleColumns})
     }
 
-handleAddNotice(){
-    this.setState({isAddNotice:true})
-}
+    handleAddNotice() {
+        this.setState({isAddNotice: true})
+    }
 
-    render() {
-        return (
-            <div>
-                <NavEditorMap isChange={this.state.buttonSave} onMapAdd={this.state.isUpdateMap
-                    ? () => this.handleMapUpdate()
-                    : () => this.handleMapAdd()} clickBackMap={() => this.props.clickBackMap()}/>
-                <div className='editor-wrap'>
-                    <div className="table-wrap" id='dev-table'>
-                        {this.getCostam()}
-                    </div>
-                    <div className="select">
-                        <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/> 
-                        <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameMap === ''
-                            ? "danger"
-                            : "success"}>
-                            <FormInput placeholder="Введите название диаграммы" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
-                        </FormIconField>
-                        { this.state.isAddNotice?
-                            <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
-                           : <Button type="success" onClick={()=> this.handleAddNotice()}>Добавить примечание</Button>
-                        }
-                        <Map id_map="map_edit" data={this.state.data} visibleColumns={this.state.visibleColumns} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
+    handleColoringMap() {
+        let dataForMap = {
+            'ISO3Column': this.state.ISO3Column,
+            'data': this.state.data,
+            'visibleColumns': this.state.visibleColumns
+        }
+
+        this.setState({dataForMap: dataForMap})
+      }
+
+        updateColumnName(name) {
+            this.setState({ISO3Column: name})
+        }
+
+        render() {
+            return (
+                <div>
+                    <NavEditorMap isChange={this.state.buttonSave} onMapAdd={this.state.isUpdateMap
+                        ? () => this.handleMapUpdate()
+                        : () => this.handleMapAdd()} clickBackMap={() => this.props.clickBackMap()}/>
+                    <div className='editor-wrap'>
+                        <div className="table-wrap" id='dev-table'>
+                            {this.getCostam()}
+                        </div>
+                        <div className="select">
+                            <FormSelect options={controlMaps} onChange={(e) => this.updateSelect(e)}/>
+                            <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameMap === ''
+                                ? "danger"
+                                : "success"}>
+                                <FormInput placeholder="Введите название диаграммы" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
+                            </FormIconField>
+                            {this.state.isAddNotice
+                                ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
+                                : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>
+}
+                            <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        )
+            )
+        }
     }
-}
