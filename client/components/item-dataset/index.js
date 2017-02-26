@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './index.less'
-import flexboxgrid from 'flexboxgrid'
 
 
 export default class ItemDataset extends Component {
@@ -18,10 +17,7 @@ const fullTime = day+"."+month+"."+year+" "+hours+":"+minutes
 
     render() {
         return (
-            <div className='button-chart col-xs-8
-                col-sm-6
-                col-md-4
-                col-lg-2' >
+            <div className='button-chart' >
               <div className="delete_dataset">
                 <i className ='fa fa-times' onClick={this.props.onDelete}></i>
                 </div>

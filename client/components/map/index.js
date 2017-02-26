@@ -6,6 +6,42 @@ import L from 'leaflet'
 import './index.less'
 import '../../../node_modules/leaflet/dist/leaflet.css'
 
+const ColorSchemes = [
+    [
+        '#ffffb2',
+        '#fed976',
+        '#feb24c',
+        '#fd8d3c',
+        '#f03b20',
+        '#bd0026'
+    ],
+    [
+        '#eff3ff',
+        '#c6dbef',
+        '#9ecae1',
+        '#6baed6',
+        '#3182bd',
+        '#08519c'
+    ],
+    [
+        '#edf8e9',
+        '#c7e9c0',
+        '#a1d99b',
+        '#74c476',
+        '#31a354',
+        '#006d2c'
+    ],
+    [
+        '#ffffcc',
+        '#c7e9b4',
+        '#7fcdbb',
+        '#41b6c4',
+        '#2c7fb8',
+        '#253494'
+    ]
+
+]
+
 export default class Map extends Component {
 
     constructor() {
@@ -16,7 +52,10 @@ export default class Map extends Component {
             geoJSON: {},
             map: {},
             info: {},
-            visibleColumns: []
+            legend:{},
+            visibleColumns: [],
+            dataForMap: {},
+            colorScheme:0
         }
     }
 
@@ -40,7 +79,9 @@ export default class Map extends Component {
         legend.onAdd = () => this.legendAdd(this.getColor)
         legend.addTo(map);
 
-        this.setState({geoJSON: geoJSON, map: map, info: info})
+
+
+        this.setState({geoJSON: geoJSON, map: map, info: info, legend:legend})
     }
 
     infoAdd(map) {
@@ -58,55 +99,69 @@ export default class Map extends Component {
     legendAdd(getColor) {
         let div = L.DomUtil.create('div', 'info legend'),
             grades = [
-                0,
-                10,
-                20,
-                50,
                 100,
-                200,
-                500,
-                1000
+                1000,
+                10000,
+                100000,
+                1000000,
+                10000000
             ],
             labels = [];
         for (var i = 0; i < grades.length; i++) {
-            div.innerHTML += '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' + grades[i] + (grades[i + 1]
+            div.innerHTML += '<i style="background:' + getColor(grades[i] + 1,this.state.colorScheme) + '"></i> ' + grades[i] + (grades[i + 1]
                 ? '&ndash;' + grades[i + 1] + '<br>'
                 : '+');
         }
         return div;
     }
 
+
     componentWillReceiveProps(nextProps) {
-        this.updateMap(nextProps.typeMap, nextProps.dataForMap)
+        this.updateTypeMap(nextProps.typeMap)
+
+        if (!this.isEmptyObject(nextProps.dataForMap.data))
+            this.updateDataMap(nextProps.dataForMap)
     }
 
-    updateMap(typeMap, dataForMap) {
-        let map = {},
-            data =  dataForMap.data
-
-        if (typeMap !== this.state.typeMap)
+    updateTypeMap(typeMap) {
+        let map,
+            geoJSON = {};
+        if (typeMap !== this.state.typeMap) {
             map = this.state.map.removeLayer(this.state.geoJSON)
-        else
-            map = this.state.map
-
-        if (!this.isEmptyObject(data)) {
-            L.geoJSON(this.getTypeMap(typeMap)).eachLayer(function(featureClass) {
-                for (let i = 0; i < Object.keys(data).length; i++)
-                    if (featureClass.feature.properties.ISO_A3 === data[i][dataForMap.ISO3Column])
-                        featureClass.feature.properties[dataForMap.visibleColumns[0]] = data[i][dataForMap.visibleColumns[0]];
-                    }
-                )
-
-            this.setState({visibleColumns: dataForMap.visibleColumns})
-
-            let geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
-                style: (feature) => this.getStyle(feature),
-                onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
-            }).addTo(map)
-            this.setState({geoJSON: geoJSON})
+            geoJSON = L.geoJSON(this.getTypeMap(typeMap)).addTo(map)
+            this.setState({typeMap: typeMap, geoJSONMap: this.getTypeMap(typeMap), map: map, geoJSON: geoJSON})
         }
+    }
 
-        this.setState({typeMap: typeMap, geoJSONMap: this.getTypeMap(typeMap), map: map})
+    updateDataMap(dataForMap) {
+          let map = this.state.map,
+           data = dataForMap.data,
+            typeMap = this.state.typeMap,
+            geoJSON = {}
+
+
+             map.removeControl(this.state.legend)
+               let legend = L.control({position: 'bottomright'});
+               legend.onAdd = () => this.legendAdd(this.getColor)
+               legend.addTo(map);
+
+
+        L.geoJSON(this.getTypeMap(typeMap)).eachLayer(function(featureClass) {
+            for (let i = 0; i < Object.keys(data).length; i++)
+                if (featureClass.feature.properties.ISO_A3 === data[i][dataForMap.ISO3Column])
+                    featureClass.feature.properties[dataForMap.visibleColumns[0]] = data[i][dataForMap.visibleColumns[0]];
+                }
+            )
+
+        this.setState({visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme})
+
+        geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
+            style: (feature) => this.getStyle(feature),
+            onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
+        }).addTo(map)
+
+
+        this.setState({map: map, geoJSON: geoJSON,legend:legend})
 
     }
 
@@ -119,30 +174,29 @@ export default class Map extends Component {
         return true;
     }
 
-    getColor(d) {
+    getColor(d,scheme) {
+      let colorScheme = ColorSchemes[scheme];
         return d > 10000000
-            ? '#800026'
+            ? colorScheme[0]
             : d > 1000000
-                ? '#BD0026'
+                ?  colorScheme[1]
                 : d > 100000
-                    ? '#E31A1C'
+                    ?  colorScheme[2]
                     : d > 10000
-                        ? '#FC4E2A'
+                        ?  colorScheme[3]
                         : d > 1000
-                            ? '#FD8D3C'
+                            ?  colorScheme[4]
                             : d > 100
-                                ? '#FEB24C'
-                                : d > 10
-                                    ? '#FED976'
-                                    : '#FFEDA0';
+                                ?  colorScheme[5]
+                                    : '#FFE';
     }
 
     getStyle(feature) {
         return {
-            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]]),
+            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]],this.state.colorScheme),
             weight: 2,
             opacity: 1,
-            color: 'white',
+            color: 'grey',
             dashArray: '3',
             fillOpacity: 0.7
         };

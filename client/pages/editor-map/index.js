@@ -21,7 +21,25 @@ const controlMaps = [
         label: 'Карта России',
         value: 'Карта России'
     }
-]
+];
+
+const ColorSchemes = [
+    {
+        label: 'Цветовая схема 1',
+        value: '0'
+    }, {
+        label: 'Цветовая схема 2',
+        value: '1'
+    }, {
+        label: 'Цветовая схема 3',
+        value: '2'
+    },
+    {
+        label: 'Цветовая схема 4',
+        value: '3'
+    }
+];
+
 
 export default class EditorMap extends Component {
 
@@ -40,10 +58,12 @@ export default class EditorMap extends Component {
             buttonSave: 'button_off',
             isUpdateMap: false,
             isAddNotice: false,
+            'colorScheme': 0,
             dataForMap: {
               'ISO3Column':'',
               'data': [],
-              'visibleColumns':[]
+              'visibleColumns':[],
+              'colorScheme': 0
             }
         }
     }
@@ -88,6 +108,10 @@ export default class EditorMap extends Component {
 
     updateSelect(option) {
         this.setState({inputSelect: option})
+    }
+
+    updateSelectColorScheme(option) {
+        this.setState({colorScheme: option})
     }
 
     createTable(dataset) {
@@ -143,7 +167,12 @@ export default class EditorMap extends Component {
                 return <CostamizationEmptyTable createTable={(dataset) => this.createTable(dataset)}/>
             else
                 return <div>
-                    <AdditionalCostamMap handleColoringMap={() => this.handleColoringMap()} updateColumnName={(name) => this.updateColumnName(name)}/>
+                    <AdditionalCostamMap
+                      handleColoringMap={() => this.handleColoringMap()}
+                      updateColumnName={(name) => this.updateColumnName(name)}
+                      ColorScheme={ColorSchemes}
+                      updateColorSchemes={(e) => this.updateSelectColorScheme(e)}
+                      />
                     <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
                 </div>
         } else { //для открытия уже существующей карты
@@ -171,7 +200,8 @@ export default class EditorMap extends Component {
         let dataForMap = {
             'ISO3Column': this.state.ISO3Column,
             'data': this.state.data,
-            'visibleColumns': this.state.visibleColumns
+            'visibleColumns': this.state.visibleColumns,
+            'colorScheme': this.state.colorScheme
         }
 
         this.setState({dataForMap: dataForMap})
