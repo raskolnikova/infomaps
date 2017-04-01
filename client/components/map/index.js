@@ -6,6 +6,8 @@ import L from 'leaflet'
 import './index.less'
 import '../../../node_modules/leaflet/dist/leaflet.css'
 
+var d3 = require('d3');
+
 const ColorSchemes = [
     [
         '#ffffb2',
@@ -152,8 +154,17 @@ export default class Map extends Component {
                     featureClass.feature.properties[dataForMap.visibleColumns[0]] = data[i][dataForMap.visibleColumns[0]];
                 }
             )
+let data1 =[6400000,54826,5468, 8796000, 587936,600000, 63000, 5900, 600, 57];
+
+        let df =   d3.scale.quantize().domain(data1).range(ColorSchemes[0]);
+
+
+        for(var i=0; i<ColorSchemes[0].length; i++){
+          console.log(df(ColorSchemes[i]));
+        }
 
         this.setState({visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme})
+
 
         geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
             style: (feature) => this.getStyle(feature),
