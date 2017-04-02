@@ -34,15 +34,14 @@ export default class EditorChart extends Component {
             showCostamization: true,
             data: [],
             visibleColumns: [],
-            nameChart: '',
+            nameChart:'',
             buttonSave: 'button_off',
             isUpdateChart: false,
             sortedColumn:[]
         }
     }
 
-    componentDidMount() {
-
+    componentWillMount () {
         this.setState({ nameChart: this.props.dataChart.name })
     }
 
@@ -136,7 +135,6 @@ sortingData(data,column){
         let value = e.target.value
         if (value !== '') {
             this.setState({ nameChart: value, buttonSave: 'button_on' })
-            console.log(this.state.nameChart)
         } else
             this.setState({ nameChart: '', buttonSave: 'button_off' })
         console.log(value)

@@ -57,7 +57,8 @@ export default class Map extends Component {
             legend:{},
             visibleColumns: [],
             dataForMap: {},
-            colorScheme:0
+            colorScheme:0,
+            domen:[10000000,1000000,100000,10000,1000,100]
         }
     }
 
@@ -78,7 +79,7 @@ export default class Map extends Component {
         info.addTo(map);
 
         let legend = L.control({position: 'bottomright'});
-        legend.onAdd = () => this.legendAdd(this.getColor)
+        legend.onAdd = () => this.legendAdd(this.getColor,this.state.domen)
         legend.addTo(map);
 
 
@@ -98,27 +99,19 @@ export default class Map extends Component {
             : 'Наведите на область');
     }
 
-    legendAdd(getColor) {
-        let div = L.DomUtil.create('div', 'info legend'),
-            grades = [
-                100,
-                1000,
-                10000,
-                100000,
-                1000000,
-                10000000
-            ],
-            labels = [];
-        for (var i = 0; i < grades.length; i++) {
-            div.innerHTML += '<i style="background:' + getColor(grades[i] + 1,this.state.colorScheme) + '"></i> ' + grades[i] + (grades[i + 1]
-                ? '&ndash;' + grades[i + 1] + '<br>'
+    legendAdd(getColor,domen) {
+        let div = L.DomUtil.create('div', 'info legend'), labels = [];
+        for (let i = 0; i < domen.length; i++) {
+            let color = getColor(domen[i] + 1,this.state.colorScheme,domen)
+            div.innerHTML += '<i style="background:' + color + '"></i> ' + domen[i] + (domen[i + 1]
+                ? '&ndash;' + domen[i + 1] + '<br>'
                 : '+');
         }
         return div;
     }
 
 
-    componentWillReceiveProps(nextProps) {
+    componentWillReceiveProps(nextProps) {  
         this.updateTypeMap(nextProps.typeMap)
 
         if (!this.isEmptyObject(nextProps.dataForMap.data))
@@ -144,7 +137,7 @@ export default class Map extends Component {
 
              map.removeControl(this.state.legend)
                let legend = L.control({position: 'bottomright'});
-               legend.onAdd = () => this.legendAdd(this.getColor)
+               legend.onAdd = () => this.legendAdd(this.getColor,this.state.domen)              
                legend.addTo(map);
 
 
@@ -154,16 +147,8 @@ export default class Map extends Component {
                     featureClass.feature.properties[dataForMap.visibleColumns[0]] = data[i][dataForMap.visibleColumns[0]];
                 }
             )
-let data1 =[6400000,54826,5468, 8796000, 587936,600000, 63000, 5900, 600, 57];
 
-        let df =   d3.scale.quantize().domain(data1).range(ColorSchemes[0]);
-
-
-        for(var i=0; i<ColorSchemes[0].length; i++){
-          console.log(df(ColorSchemes[i]));
-        }
-
-        this.setState({visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme})
+        this.setState({visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme,domen:dataForMap.domen})
 
 
         geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
@@ -185,26 +170,26 @@ let data1 =[6400000,54826,5468, 8796000, 587936,600000, 63000, 5900, 600, 57];
         return true;
     }
 
-    getColor(d,scheme) {
-      let colorScheme = ColorSchemes[scheme];
-        return d > 10000000
+    getColor(d, scheme, domen) {
+        let colorScheme = ColorSchemes[scheme];
+        return d > domen[0]
             ? colorScheme[0]
-            : d > 1000000
+            : d > domen[1]
                 ?  colorScheme[1]
-                : d > 100000
+                : d > domen[2]
                     ?  colorScheme[2]
-                    : d > 10000
+                    : d > domen[3]
                         ?  colorScheme[3]
-                        : d > 1000
+                        : d > domen[4]
                             ?  colorScheme[4]
-                            : d > 100
+                            : d > domen[5]
                                 ?  colorScheme[5]
                                     : '#FFE';
     }
 
     getStyle(feature) {
         return {
-            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]],this.state.colorScheme),
+            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]],this.state.colorScheme,this.state.domen),
             weight: 2,
             opacity: 1,
             color: 'grey',

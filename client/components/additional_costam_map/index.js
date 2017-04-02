@@ -3,19 +3,49 @@ import {FormSelect, FormInput, FormIconField, Button} from 'elemental'
 
 
 export default class AdditionalCostamMap extends Component {
+
+constructor(){
+  super()
+  this.state={
+    domen:[1000000,100000,10000,1000,100,10],
+    columnName:'',
+    colorScheme:0
+  }
+}
+
+  handelUpdateDomen(value, countInput) {
+      let newDomen = this.state.domen;
+    if (value !== '' && value!==newDomen[countInput]) {
+        newDomen[countInput] = Number(value);
+        this.setState({ domen: newDomen })
+    }
+  }
+
+ updateColumnName(name) {
+        this.setState({columnName: name})
+    }
+
+     updateColorSchemes(option) {
+        this.setState({colorScheme: option})
+    }
+
   render() {
       return (
 <div>
           <div className='geo-input'>
-            <FormInput placeholder="Введите название колонки с ISO3 кодом стран"  onChange={(e) => this.props.updateColumnName(e.target.value)}/>
-            <Button type="success">Добавить геопривязку</Button>
-            <FormSelect options={this.props.ColorScheme} onChange={(e) => this.props.updateColorSchemes(e)}/>
+            <FormInput placeholder="Введите название колонки с ISO3 кодом стран"  onChange={(e) => this.updateColumnName(e.target.value)}/>
+            <FormSelect options={this.props.ColorScheme} onChange={(e) => this.updateColorSchemes(e)}/>
           </div>
           <div className="domen-input">
-            <input type="text"/>
-            <input type="text"/>
+            <input type="text"  onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,0)}/>
+            <input type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,1)} />
+            <input type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,2)}/>
+            <input type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,3)}/>
+            <input type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,4)}/>
+            <input type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,5)}/>
           </div>
-          <Button type="success" onClick={() => this.props.handleColoringMap()}>Раскрасить карту</Button>
+          <Button type="success" onClick={(columnName,domen,colorScheme) => this.props.handleColoringMap(this.state.columnName,this.state.domen,this.state.colorScheme)}>Раскрасить карту</Button>
+          <Button type="success">Добавить геопривязку</Button>
           </div>
       )
   }

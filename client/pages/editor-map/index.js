@@ -53,17 +53,16 @@ export default class EditorMap extends Component {
             showCostamization: true,
             data: [],
             visibleColumns: [],
-            ISO3Column: '',
             nameMap: '',
             buttonSave: 'button_off',
             isUpdateMap: false,
             isAddNotice: false,
-            'colorScheme': 0,
             dataForMap: {
               'ISO3Column':'',
               'data': [],
               'visibleColumns':[],
-              'colorScheme': 0
+              'colorScheme': 0,
+              'domen':[1000000,100000,10000,1000,100,10]
             }
         }
     }
@@ -106,13 +105,11 @@ export default class EditorMap extends Component {
             console.error('error save map');
         }
 
+    
     updateSelect(option) {
         this.setState({inputSelect: option})
     }
 
-    updateSelectColorScheme(option) {
-        this.setState({colorScheme: option})
-    }
 
     createTable(dataset) {
         this.setState(prevState => ({
@@ -168,8 +165,7 @@ export default class EditorMap extends Component {
             else
                 return <div>
                     <AdditionalCostamMap
-                      handleColoringMap={() => this.handleColoringMap()}
-                      updateColumnName={(name) => this.updateColumnName(name)}
+                      handleColoringMap={(columnName,domen,colorScheme) => this.handleColoringMap(columnName,domen,colorScheme)}
                       ColorScheme={ColorSchemes}
                       updateColorSchemes={(e) => this.updateSelectColorScheme(e)}
                       />
@@ -182,7 +178,7 @@ export default class EditorMap extends Component {
             this.state.isUpdateMap = true;
             this.state.data = this.props.dataMap.dataFile;
             return <div>
-                <AdditionalCostamMap handleColoringMap={() => this.handleColoringMap()} updateColumnName={(name) => this.updateColumnName(name)}/>
+                <AdditionalCostamMap handleColoringMap={(columnName,domen,colorScheme) => this.handleColoringMap(columnName,domen,colorScheme)} />
                 <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
             </div>
         }
@@ -196,20 +192,17 @@ export default class EditorMap extends Component {
         this.setState({isAddNotice: true})
     }
 
-    handleColoringMap() {
+    handleColoringMap(columnName,domen,colorScheme) {
         let dataForMap = {
-            'ISO3Column': this.state.ISO3Column,
+            'ISO3Column': columnName,
             'data': this.state.data,
             'visibleColumns': this.state.visibleColumns,
-            'colorScheme': this.state.colorScheme
+            'colorScheme': colorScheme,
+            'domen':domen
         }
-
         this.setState({dataForMap: dataForMap})
       }
 
-        updateColumnName(name) {
-            this.setState({ISO3Column: name})
-        }
 
         render() {
             return (
@@ -226,7 +219,7 @@ export default class EditorMap extends Component {
                             <FormIconField width="one-fifth" iconPosition="left" iconKey="stop" iconColor={this.state.nameMap === ''
                                 ? "danger"
                                 : "success"}>
-                                <FormInput placeholder="Введите название диаграммы" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
+                                <FormInput placeholder="Введите название карты" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
                             </FormIconField>
                             {this.state.isAddNotice
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
