@@ -54,6 +54,7 @@ export default class EditorMap extends Component {
             data: [],
             visibleColumns: [],
             nameMap: '',
+            notice:'',
             buttonSave: 'button_off',
             isUpdateMap: false,
             isAddNotice: false,
@@ -78,7 +79,9 @@ export default class EditorMap extends Component {
                 dataFile: this.state.data,
                 visibleColumns: this.state.visibleColumns,
                 name: this.state.nameMap,
-                colorSchema: [],
+                colorSchema: this.state.dataForMap.colorScheme,
+                ISO3Column:this.state.dataForMap.ISO3Column,
+                domen:this.state.dataForMap.domen,
                 createdAt: new Date()
             }
             MapActions.updateMap(this.state.idMap, map);
@@ -95,7 +98,9 @@ export default class EditorMap extends Component {
                 dataFile: this.state.data,
                 visibleColumns: this.state.visibleColumns,
                 name: this.state.nameMap,
-                colorSchema: [],
+                colorSchema: this.state.dataForMap.colorScheme,
+                ISO3Column:this.state.dataForMap.ISO3Column,
+                domen:this.state.dataForMap.domen,
                 createdAt: new Date(),
             }
             MapActions.createMap(map);
@@ -149,6 +154,10 @@ export default class EditorMap extends Component {
             this.setState({nameMap: '', buttonSave: 'button_off'})
     }
 
+     updateNotice(e) {
+            this.setState({notice: e.target.value})
+    }
+
     isEmptyObject(obj) {
         for (let i in obj) {
             if (obj.hasOwnProperty(i)) {
@@ -178,7 +187,9 @@ export default class EditorMap extends Component {
             this.state.isUpdateMap = true;
             this.state.data = this.props.dataMap.dataFile;
             return <div>
-                <AdditionalCostamMap handleColoringMap={(columnName,domen,colorScheme) => this.handleColoringMap(columnName,domen,colorScheme)} />
+                <AdditionalCostamMap handleColoringMap={(columnName,domen,colorScheme) => this.handleColoringMap(columnName,domen,colorScheme)}
+                                        ColorScheme={ColorSchemes}
+                                        updateColorSchemes={(e) => this.updateSelectColorScheme(e)} />
                 <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
             </div>
         }
@@ -192,16 +203,16 @@ export default class EditorMap extends Component {
         this.setState({isAddNotice: true})
     }
 
-    handleColoringMap(columnName,domen,colorScheme) {
+    handleColoringMap(columnName, domen, colorScheme) {
         let dataForMap = {
             'ISO3Column': columnName,
             'data': this.state.data,
             'visibleColumns': this.state.visibleColumns,
             'colorScheme': colorScheme,
-            'domen':domen
+            'domen': domen
         }
-        this.setState({dataForMap: dataForMap})
-      }
+        this.setState({ dataForMap: dataForMap })
+    }
 
 
         render() {
@@ -222,7 +233,7 @@ export default class EditorMap extends Component {
                                 <FormInput placeholder="Введите название карты" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
                             </FormIconField>
                             {this.state.isAddNotice
-                                ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNameMap(e)}/>
+                                ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>
 }
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>

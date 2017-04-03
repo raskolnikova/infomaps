@@ -55,8 +55,4 @@ export default class ItemChart extends Component {
     }
 }
 
-ItemChart.propTypes = {
-    name: React.PropTypes.string.isRequired,
-    type: React.PropTypes.string.isRequired
 
-};

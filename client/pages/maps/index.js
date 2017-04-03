@@ -8,18 +8,6 @@ import MapAction from '../../action/MapAction.js'
 
 import './index.less'
 
-const maps = [
-    {
-        id: 1,
-        name: 'Население стран за 2013 год'
-    }, {
-        id: 2,
-        name: 'Население стран за 2014 год'
-    }, {
-        id: 3,
-        name: 'Население стран за 2015 год'
-    }
-];
 
 function getStateFromFlux() {
     return {isLoading: MapStore.isLoading(), maps: MapStore.getMaps()};
