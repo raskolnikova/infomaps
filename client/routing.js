@@ -7,6 +7,7 @@ import ContainerMap from './containers/container-map/index'
 import HomePage from './pages/homepage/index'
 //import Charts from './pages/chart/index'
 //import Maps from './pages/page-maps/index'
+import Registration from './pages/registration/index'
 import Login from './pages/login/index'
 import NotFound from './pages/not-found/index'
 import EditorChart from './pages/editor-chart/index'
@@ -27,7 +28,8 @@ export const routes = (
             <Route path='editor-map' component={EditorMap}/>
         </Route>
         <Route path='/datasets' component={Datasets}/>
-        <Route path='login' component={Login}/>
+        <Route path='/registration' component={Registration}/>
+        <Route path='/login' component={Login}/>
         <Route path='*' component={NotFound}/>
     </div>
 )

@@ -42,7 +42,7 @@ export default class DatasetsPage extends Component {
     }
 
     handleDatasetGet(dataset){
-      console.log(dataset);
+    //  console.log(dataset);
       // this.props.createTable(dataset)
     }
 

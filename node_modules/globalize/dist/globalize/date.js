@@ -1,5 +1,5 @@
 /**
- * Globalize v1.2.2
+ * Globalize v1.2.3
  *
  * http://github.com/jquery/globalize
  *
@@ -7,10 +7,10 @@
  * Released under the MIT license
  * http://jquery.org/license
  *
- * Date: 2016-12-31T15:52Z
+ * Date: 2017-03-17T01:41Z
  */
 /*!
- * Globalize v1.2.2 2016-12-31T15:52Z Released under the MIT license
+ * Globalize v1.2.3 2017-03-17T01:41Z Released under the MIT license
  * http://git.io/TrdQbw
  */
 (function( root, factory ) {
@@ -776,9 +776,14 @@ var dateFormatProperties = function( pattern, cldr ) {
 
 			// Period (AM or PM)
 			case "a":
-				properties.dayPeriods = cldr.main(
-					"dates/calendars/gregorian/dayPeriods/format/wide"
-				);
+				properties.dayPeriods = {
+					am: cldr.main(
+						"dates/calendars/gregorian/dayPeriods/format/wide/am"
+					),
+					pm: cldr.main(
+						"dates/calendars/gregorian/dayPeriods/format/wide/pm"
+					)
+				};
 				break;
 
 			// Hour
@@ -1120,7 +1125,7 @@ var dateParse = function( value, tokens, properties ) {
 			case "O":
 			case "X":
 			case "x":
-				timezoneOffset = token.value - date.getTimezoneOffset();
+				timezoneOffset = token.value;
 				break;
 		}
 
@@ -1164,8 +1169,8 @@ var dateParse = function( value, tokens, properties ) {
 		date.setHours( date.getHours() + 12 );
 	}
 
-	if ( timezoneOffset ) {
-		date.setMinutes( date.getMinutes() + timezoneOffset );
+	if ( timezoneOffset !== undefined ) {
+		date.setMinutes( date.getMinutes() + timezoneOffset - date.getTimezoneOffset() );
 	}
 
 	// Truncate date at the most precise unit defined. Eg.
@@ -1308,7 +1313,16 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 				// Unicode equivalent to /\d\d?/
 				numeric = true;
-				return tokenRe = new RegExp( "(" + regexpN.source + ")(" + regexpN.source + ")?" );
+				return tokenRe = new RegExp( "(" + regexpN.source + "){1,2}" );
+			}
+		}
+
+		function oneOrTwoDigitsIfLengthOneOrTwo() {
+			if ( length === 1 || length === 2 ) {
+
+				// Unicode equivalent to /\d\d?/
+				numeric = true;
+				return tokenRe = new RegExp( "(" + regexpN.source + "){1,2}" );
 			}
 		}
 
@@ -1317,7 +1331,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 				// Unicode equivalent to /\d\d/
 				numeric = true;
-				return tokenRe = new RegExp( "(" + regexpN.source + ")(" + regexpN.source + ")" );
+				return tokenRe = new RegExp( "(" + regexpN.source + "){2}" );
 			}
 		}
 
@@ -1382,8 +1396,11 @@ var dateTokenizer = function( value, numberParser, properties ) {
 					tokenRe = new RegExp( "(" + regexpN.source + ")+" );
 				} else if ( length === 2 ) {
 
-					// Unicode equivalent to /\d\d/
-					tokenRe = new RegExp( "(" + regexpN.source + ")(" + regexpN.source + ")" );
+					// Lenient parsing: there's no year pattern to indicate non-zero-padded 2-digits
+					// year, so parser accepts both zero-padded and non-zero-padded for `yy`.
+					//
+					// Unicode equivalent to /\d\d?/
+					tokenRe = new RegExp( "(" + regexpN.source + "){1,2}" );
 				} else {
 
 					// Unicode equivalent to /\d{length,}/
@@ -1397,11 +1414,12 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 				// number l=1:{1}, l=2:{2}.
 				// lookup l=3...
-				oneDigitIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
-					"gregorian/quarters",
-					chr === "Q" ? "format" : "stand-alone",
-					widths[ length - 3 ]
-				]);
+				oneDigitIfLengthOne() || twoDigitsIfLengthTwo() ||
+					lookup([
+						"gregorian/quarters",
+						chr === "Q" ? "format" : "stand-alone",
+						widths[ length - 3 ]
+					]);
 				break;
 
 			// Month
@@ -1410,7 +1428,11 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 				// number l=1:{1,2}, l=2:{2}.
 				// lookup l=3...
-				oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo() || lookup([
+				//
+				// Lenient parsing: skeleton "yMd" (i.e., one M) may include MM for the pattern,
+				// therefore parser accepts both zero-padded and non-zero-padded for M and MM.
+				// Similar for L.
+				oneOrTwoDigitsIfLengthOneOrTwo() || lookup([
 					"gregorian/months",
 					chr === "M" ? "format" : "stand-alone",
 					widths[ length - 3 ]
@@ -1423,7 +1445,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 				// number {l,3}.
 				if ( length <= 3 ) {
 
-					// Unicode equivalent to /\d{length,3}/
+					// Equivalent to /\d{length,3}/
 					numeric = true;
 					tokenRe = new RegExp( "(" + regexpN.source + "){" + length + ",3}" );
 				}
@@ -1478,8 +1500,14 @@ var dateTokenizer = function( value, numberParser, properties ) {
 				]);
 				break;
 
-			// Week, Day, Hour, Minute, or Second
+			// Week
 			case "w":
+
+				// number l1:{1,2}, l2:{2}.
+				oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo();
+				break;
+
+			// Day, Hour, Minute, or Second
 			case "d":
 			case "h":
 			case "H":
@@ -1490,7 +1518,17 @@ var dateTokenizer = function( value, numberParser, properties ) {
 			case "s":
 
 				// number l1:{1,2}, l2:{2}.
-				oneOrTwoDigitsIfLengthOne() || twoDigitsIfLengthTwo();
+				//
+				// Lenient parsing:
+				// - skeleton "hms" (i.e., one m) always includes mm for the pattern, i.e., it's
+				//   impossible to use a different skeleton to parse non-zero-padded minutes,
+				//   therefore parser accepts both zero-padded and non-zero-padded for m. Similar
+				//   for seconds s.
+				// - skeleton "hms" (i.e., one h) may include h or hh for the pattern, i.e., it's
+				//   impossible to use a different skeleton to parser non-zero-padded hours for some
+				//   locales, therefore parser accepts both zero-padded and non-zero-padded for h.
+				//   Similar for d (in skeleton yMd).
+				oneOrTwoDigitsIfLengthOneOrTwo();
 				break;
 
 			case "S":
@@ -1562,7 +1600,7 @@ var dateTokenizer = function( value, numberParser, properties ) {
 
 			default:
 				token.type = "literal";
-				tokenRe = /./;
+				tokenRe = new RegExp( regexpEscape( current ) );
 		}
 
 		if ( !tokenRe ) {
@@ -1622,6 +1660,22 @@ var dateParseProperties = function( cldr ) {
 	return {
 		preferredTimeData: cldr.supplemental.timeData.preferred()
 	};
+};
+
+
+
+
+var objectFilter = function( object, testRe ) {
+	var key,
+		copy = {};
+
+	for ( key in object ) {
+		if ( testRe.test( key ) ) {
+			copy[ key ] = object[ key ];
+		}
+	}
+
+	return copy;
 };
 
 
@@ -1749,9 +1803,13 @@ var dateTokenizerProperties = function( pattern, cldr ) {
 
 			// Period (AM or PM)
 			case "a":
-				cldr.main([
+				cldr.main(
 					"dates/calendars/gregorian/dayPeriods/format/wide"
-				]);
+				);
+				properties[ "gregorian/dayPeriods/format/wide" ] = objectFilter(
+					properties[ "gregorian/dayPeriods/format/wide" ],
+					/^am|^pm/
+				);
 				break;
 
 			// Zone

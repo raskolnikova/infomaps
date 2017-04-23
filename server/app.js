@@ -1,6 +1,11 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import session from 'express-session'
+var MongoStore = require('connect-mongo')(session);
+
+import config from '../etc/config.json'
+
 
 import {serverPort} from '../etc/config.json'
 
@@ -9,6 +14,8 @@ import * as connection from './utils/DataBaseUtils'
 import * as dbDataSet from './utils/DataSet';
 import * as dbChart from './utils/Chart';
 import * as dbMap from './utils/Map';
+import * as dbUser from './utils/User';
+
 
 
 connection.setUpConnection();
@@ -19,6 +26,58 @@ const app = express();
 app.use(bodyParser.json({limit: '30mb'}));
 
 app.use(cors({origin: '*'}));
+
+app.use(session({
+    secret:'I write this fucking app',
+    resave: false,
+    saveUninitialized:false,
+    store: new MongoStore({
+        url:`mongodb://${config.db.host}:${config.db.port}/${config.db.name}`
+    })
+}))
+
+//-----------------------------------------------------------------------
+app.post('/login', (req, res, next) => {
+    if (req.session.user) return res.redirect('/')
+	dbUser.checkUser(req.body)
+		.then(function(user){
+			if(user){
+				req.session.user = {id: user._id, name: user.username}
+				res.redirect('/')
+			} else {
+				return next(error)
+			}
+		})
+		.catch(function(error){
+			return next(error)
+		})
+ 
+});
+
+app.post('/registration', function(req, res, next) {
+  dbUser.createUser(req.body).then(data => res.send(data))
+  	 .then(function(result){
+  	 	console.log("User created")
+  	 })
+  	.catch(function(err){
+  		if (err.toJSON().code == 11000){
+  			res.status(500).send("This email already exist")
+  		}
+  	})
+});
+ 
+app.post('/logout', function(req, res) {
+	if (req.session.user) {
+		delete req.session.user;
+		res.redirect('/')
+	}
+});
+
+app.get('/users', (req, res) => {
+  dbUser.listUsers().then(data => res.send(data));
+});
+
+//-----------------------------------------------------------------------
 
 app.get('/datasets', (req, res) => {
   dbDataSet.listDataSet().then(data => res.send(data));
@@ -31,6 +90,8 @@ app.post('/import', (req, res) => {
 app.delete('/datasets/:id', (req, res) => {
     dbDataSet.deleteDataSet(req.params.id).then(data => res.send(data));
 });
+
+//-----------------------------------------------------------------------
 
 
 app.get('/charts', (req, res) => {
@@ -54,6 +115,9 @@ app.put('/charts/:id', (req, res) => {
 });
 
 
+//-----------------------------------------------------------------------
+
+
 app.get('/maps', (req, res) => {
   dbMap.listMap().then(data => res.send(data));
 });
@@ -73,6 +137,10 @@ app.delete('/maps/:id', (req, res) => {
 app.put('/maps/:id', (req, res) => {
     dbMap.updateMap(req.params.id,req.body).then(data => res.send(data));
 });
+
+//-----------------------------------------------------------------------
+
+
 
 
 const server = app.listen(serverPort, () => {
