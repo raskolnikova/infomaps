@@ -16,7 +16,20 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+     scripts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Script'
+    }],
+     charts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Chart'
+    }],
+     maps: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Map'
+    }],
+
 });
 
 const DataSet = mongoose.model('User', UserSchema);

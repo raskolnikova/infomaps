@@ -13,6 +13,8 @@ import NotFound from './pages/not-found/index'
 import EditorChart from './pages/editor-chart/index'
 import EditorMap from './pages/editor-map/index'
 import Datasets from './pages/datasets-page/index'
+import Scripts from './pages/scripts-page/index'
+
 
 import {Route, IndexRoute} from 'react-router'
 
@@ -28,6 +30,7 @@ export const routes = (
             <Route path='editor-map' component={EditorMap}/>
         </Route>
         <Route path='/datasets' component={Datasets}/>
+        <Route path='/scripts' component={Scripts}/>
         <Route path='/registration' component={Registration}/>
         <Route path='/login' component={Login}/>
         <Route path='*' component={NotFound}/>

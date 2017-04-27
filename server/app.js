@@ -15,6 +15,7 @@ import * as dbDataSet from './utils/DataSet';
 import * as dbChart from './utils/Chart';
 import * as dbMap from './utils/Map';
 import * as dbUser from './utils/User';
+import * as dbScript from './utils/Script';
 
 
 
@@ -89,6 +90,29 @@ app.post('/import', (req, res) => {
 
 app.delete('/datasets/:id', (req, res) => {
     dbDataSet.deleteDataSet(req.params.id).then(data => res.send(data));
+});
+
+//-----------------------------------------------------------------------
+
+
+app.get('/scripts', (req, res) => {
+  dbScript.listScripts().then(data => res.send(data));
+});
+
+app.get('/scripts/:id', (req, res) => {
+    dbScript.getScriptById(req.params.id).then(data => res.send(data));
+});
+
+app.post('/scripts', (req, res) => {
+ dbScript.createScript(req.body).then(data => res.send(data));
+});
+
+app.delete('/scripts/:id', (req, res) => {
+   dbScript.deleteScript(req.params.id).then(data => res.send(data));
+});
+
+app.put('/scripts/:id', (req, res) => {
+    dbScript.updateScript(req.params.id,req.body).then(data => res.send(data));
 });
 
 //-----------------------------------------------------------------------

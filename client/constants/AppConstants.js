@@ -12,5 +12,8 @@ export default keyMirror({
     LOAD_MAP_FAIL: null,
     LOAD_USER_REQUEST: null,
     LOAD_USER_SUCCESS: null,
-    LOAD_USER_FAIL: null
+    LOAD_USER_FAIL: null,
+    LOAD_SCRIPT_REQUEST: null,
+    LOAD_SCRIPT_SUCCESS: null,
+    LOAD_SCRIPT_FAIL: null
 });

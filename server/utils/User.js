@@ -11,7 +11,11 @@ export function createUser(data){
   const user = new User({
     username: data.username,
     email:data.email,
-    password:hash(data.password)
+    password:hash(data.password),
+    scripts:data.scripts,
+    maps:data.maps,
+    charts:data.charts,
+    
   });
   return user.save();
 }
