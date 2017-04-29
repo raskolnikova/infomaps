@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Form, FormField,FormInput,Button} from 'elemental'
+import {Link} from 'react-router'
 
 
 import UserActions from '../../action/UserAction'
@@ -50,7 +51,12 @@ handleAddPassword(password){
                 <FormInput type="password"  name="password" onChange={(e) => this.handleAddPassword(e.target.value)} />
             </FormField>
             <FormField offsetAbsentLabel>
+            <div className='actions'>   
                 <Button onClick= {() => this.handleAddUser()}>Зарегистрироваться</Button>
+                <Link to='/login'>
+                    <div  className='inscription registration'>Войти</div>
+                </Link>
+            </div>
             </FormField>
 </Form>     
 </div>

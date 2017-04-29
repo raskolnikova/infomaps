@@ -18,6 +18,13 @@ import Scripts from './pages/scripts-page/index'
 
 import {Route, IndexRoute} from 'react-router'
 
+function checkLogin(nextState, replace) {
+  const login = window.localStorage.getItem('rr_login')
+  if (login !== 'Radiona') {
+       replace('/registration')
+  }
+}
+
 export const routes = (
     <div>
         <Route path='/' component={HomePage}/>
@@ -30,7 +37,7 @@ export const routes = (
             <Route path='editor-map' component={EditorMap}/>
         </Route>
         <Route path='/datasets' component={Datasets}/>
-        <Route path='/scripts' component={Scripts}/>
+        <Route path='/scripts' component={Scripts} onEnter={checkLogin}/>
         <Route path='/registration' component={Registration}/>
         <Route path='/login' component={Login}/>
         <Route path='*' component={NotFound}/>
