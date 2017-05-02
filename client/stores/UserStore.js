@@ -8,11 +8,11 @@ const CHANGE_EVENT = 'change';
 let _users = [];
 let _loadingError = null;
 let _isLoading = true;
+let _isExistUser=false;
 
 function formatUser(user) {
     return {
         id: user._id,
-        username: user.username,
         email:user.email,
         password: user.password
     };
@@ -25,6 +25,9 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
 
     getUsers() {
         return _users;
+    },
+       getAnswerFromServer() {
+        return _isExistUser;
     },
 
     emitChange: function() {
@@ -41,10 +44,10 @@ const TasksStore = Object.assign({}, EventEmitter.prototype, {
 });
 
 AppDispatcher.register(function(action) {
+    console.log(action.type)
     switch(action.type) {
         case AppConstants.LOAD_USER_REQUEST: {
             _isLoading = true;
-
             TasksStore.emitChange();
             break;
         }
@@ -53,17 +56,24 @@ AppDispatcher.register(function(action) {
             _isLoading = false;
             _users = action.user.map( formatUser );
             _loadingError = null;
-
             TasksStore.emitChange();
-
+            break;
+        }
+        case AppConstants.LOAD_USER_FAIL: {
+            _loadingError = action.error;
+            TasksStore.emitChange();
             break;
         }
 
-        case AppConstants.LOAD_USER_FAIL: {
-            _loadingError = action.error;
-
+          case AppConstants.LOAD_USER_ISEXIST: {
+            _isExistUser=true;
             TasksStore.emitChange();
+            break;
+        }
 
+         case AppConstants.LOAD_USER_ISNOTEXIST: {
+            _isExistUser=false;
+            TasksStore.emitChange();
             break;
         }
 

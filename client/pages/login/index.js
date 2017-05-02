@@ -32,9 +32,6 @@ handleAddPassword(password){
  this.setState({password:password})
 }
 
-
-
-
     render() {
           return (
               <div className="form-container ">

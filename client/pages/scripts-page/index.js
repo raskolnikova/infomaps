@@ -14,38 +14,6 @@ function getStateFromFlux() {
   return {isLoading: ScriptStore.isLoading(), displayedScripts: ScriptStore.getScripts(), isNewScript:false,nameScript:''};
 }
 
-const scripts = [
-    {   id:"1",
-        name:"pript1"
-    },
-     {
-         id:"2",
-        name:"script2"
-    },
-     {
-         id:"3",
-        name:"dript3"
-    },
-     {
-        id:"4",
-        name:"aript4"
-    },
-     {   id:"5",
-        name:"script1"
-    },
-     {
-         id:"6",
-        name:"script2"
-    },
-     {
-         id:"7",
-        name:"script3"
-    },
-     {
-        id:"8",
-        name:"script4"
-    }
-]
 
 export default class ScriptsPage extends Component {
 

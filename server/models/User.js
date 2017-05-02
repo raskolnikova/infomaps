@@ -3,11 +3,6 @@ import mongoose from 'mongoose'
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
-    username: {
-        type: String,
-         unique: true,
-        required: true
-    },
      email: {
         type: String,
          unique: true,
@@ -32,4 +27,4 @@ const UserSchema = new Schema({
 
 });
 
-const DataSet = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', UserSchema);

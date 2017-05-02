@@ -9,7 +9,6 @@ const User = mongoose.model('User');
 
 export function createUser(data){
   const user = new User({
-    username: data.username,
     email:data.email,
     password:hash(data.password),
     scripts:data.scripts,

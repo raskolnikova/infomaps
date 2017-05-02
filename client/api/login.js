@@ -5,12 +5,11 @@ import { apiPrefix } from '../../etc/config.json';
 export default {
 
 
-    listDataset() {
-        return axios.get(`${apiPrefix}/login`);
-    },
+    // listUsers() {
+    //     return axios.get(`${apiPrefix}/login`);
+    // },
 
     createUser(data) {
-        console.log(data)
         return axios.post(`${apiPrefix}/registration`, data);
     },
 

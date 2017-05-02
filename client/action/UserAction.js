@@ -1,4 +1,4 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import AppDispatcher from '../dispatcher/AppDispatcherUser';
 import Constants from '../constants/AppConstants';
 
 import api from '../api/login';
@@ -23,12 +23,19 @@ const UserActions = {
             })
         );
     },
-
     createUser(user) {
         api.createUser(user)
-       
+        .then(({ data }) =>
+            AppDispatcher.dispatch({
+                type: Constants.LOAD_USER_ISNOTEXIST,
+                isExistUser: data
+            })
+        )
         .catch(err =>
-            console.error(err),
+            AppDispatcher.dispatch({
+                type: Constants.LOAD_USER_ISEXIST,
+                error: err
+            })
         );
     },
 
