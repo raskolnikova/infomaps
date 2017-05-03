@@ -39,12 +39,12 @@ app.use(session({
 
 //-----------------------------------------------------------------------
 app.post('/login', (req, res, next) => {
-    if (req.session.user) return res.redirect('/')
+    if (req.session.user) return res.status(200).send("OK")
 	dbUser.checkUser(req.body)
 		.then(function(user){
 			if(user){
-				req.session.user = {id: user._id, name: user.username}
-				res.redirect('/')
+				req.session.user = {id: user._id, name: user.email}
+				res.status(200).send("OK")
 			} else {
 				return next(error)
 			}

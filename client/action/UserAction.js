@@ -4,16 +4,16 @@ import Constants from '../constants/AppConstants';
 import api from '../api/login';
 
 const UserActions = {
-    loadUser() {
+    checkUser(user) {
         AppDispatcher.dispatch({
             type: Constants.LOAD_USER_REQUEST
         });
 
-        api.checkUser()
+        api.checkUser(user)
         .then(({ data }) =>
             AppDispatcher.dispatch({
                 type: Constants.LOAD_USER_SUCCESS,
-                user: data
+                isAllRight: data
             })
         )
         .catch(err =>
