@@ -236,7 +236,7 @@ export default class EditorMap extends Component {
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>
 }
-                            <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap}/>
+                            <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice}/>
                         </div>
                     </div>
                 </div>

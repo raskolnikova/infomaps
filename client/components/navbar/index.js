@@ -12,11 +12,19 @@ export default class NavBar extends Component {
     render() {
         return (
             <nav className="flex-container">
-              <Link to='/'>
+              <Link to='/scripts'>
                   <div className='button'>
                       <div className='wrap-but'>
                           <i className="fa fa-home fa-3x"></i>
                           <div className='inscription'>На главную</div>
+                      </div>
+                  </div>
+              </Link>
+              <Link to='/'>
+                  <div className='button'>
+                      <div className='wrap-but'>
+                          <i className="fa fa-puzzle-piece fa-3x"></i>
+                          <div className='inscription'>Конструктор</div>
                       </div>
                   </div>
               </Link>
@@ -44,8 +52,18 @@ export default class NavBar extends Component {
                         </div>
                     </div>
                 </Link>
-
+                <div className="user">  
+                 
+               
+                 <Link to='/'>
+                            <div className='inscription'>Пользователь</div>
+                </Link>
+                 <Link to='/'>
+                            <div className='inscription'>Выход</div>
+                </Link>
+                </div>
             </nav>
+            
         )
     }
 }

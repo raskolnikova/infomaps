@@ -18,12 +18,12 @@ var width = 700,
     ],
     title = "User sample",
 
-    value = function(d) {
-        return + d.population;
-    },
-    name = function(d) {
-        return d.age;
-    },
+    // value = function(d) {
+    //     return + d.population;
+    // },
+     name = function(d) {
+        return d;
+     },
     innerRadius = 10;
 
 export default class ViewChart extends Component {
@@ -42,6 +42,18 @@ export default class ViewChart extends Component {
     isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
+
+
+getDataForPieChart(d,column){
+    console.log(d)
+    console.log(column)
+    
+    console.log(d[column[0]])
+if (!this.isNumeric(d[column[0]]))
+            return 0
+        else 
+            return d[column[0]]
+}
 
     getX(d, visibleColumns) {
         let count = visibleColumns.length - 1
@@ -86,7 +98,7 @@ export default class ViewChart extends Component {
                 return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={width} height={height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
                 break;
             case 'Круговая диаграмма':
-                return <PieChart data={this.state.data} width={width} height={height} chartSeries={chartSeries} value={value} name={name}/>
+                return <PieChart data={this.state.data} width={width} height={height} chartSeries={this.getChartSeries(this.props.visibleColumns)} value={(data, visibleColumns) => this.getDataForPieChart(this.state.data, this.props.visibleColumns)} name={name}/>
                 break;
             case 'Кольцевая диаграмма':
                 return <PieChart data={this.state.data} width={width} height={height} chartSeries={chartSeries} value={value} name={name} innerRadius={innerRadius}/>

@@ -75,7 +75,7 @@ export default class Map extends Component {
 
         let info = L.control();
         info.onAdd = (map) => this.infoAdd(map)
-        info.update = (props) => this.infoUpdate(props)
+        info.update = (props,notice) => this.infoUpdate(props,this.props.notice)
         info.addTo(map);
 
         let legend = L.control({position: 'bottomright'});
@@ -93,9 +93,9 @@ export default class Map extends Component {
         return this._div;
     }
 
-    infoUpdate(props) {
+    infoUpdate(props,notice) {
         this._div.innerHTML = '<h4>Примечание</h4>' + (props
-            ? '<b>' + props.NAME_LONG + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+            ? '<b>' + props.NAME_LONG + '</b><br />' + props.density + ' '+notice
             : 'Наведите на область');
     }
 
@@ -113,6 +113,7 @@ export default class Map extends Component {
 
     componentWillReceiveProps(nextProps) {  
         this.updateTypeMap(nextProps.typeMap)
+        this.updateNotice(nextProps.notice)
 
         if (!this.isEmptyObject(nextProps.dataForMap.data))
             this.updateDataMap(nextProps.dataForMap)
@@ -127,6 +128,16 @@ export default class Map extends Component {
             this.setState({typeMap: typeMap, geoJSONMap: this.getTypeMap(typeMap), map: map, geoJSON: geoJSON})
         }
     }
+
+updateNotice(notic){
+ let map = this.state.map;
+          map.removeControl(this.state.info)
+    let info = L.control();
+        info.onAdd = (map) => this.infoAdd(map)
+        info.update = (props,notice) => this.infoUpdate(props,notic)
+        info.addTo(map)
+this.setState({map:map,info:info})
+}
 
     updateDataMap(dataForMap) {
           let map = this.state.map,
