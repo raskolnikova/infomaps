@@ -181,35 +181,28 @@ sortingData(data,column){
         return ( 
             <div>
             <NavEditorChart isChange = { this.state.buttonSave }
-            onChartAdd = { this.state.isUpdateChart ? () => this.handleChartUpdate() : () => this.handleChartAdd() }
-            clickBackChart = {
-                () => this.props.clickBackChart() }/> 
+                            onChartAdd = { this.state.isUpdateChart ? () => this.handleChartUpdate() : () => this.handleChartAdd() }
+                            clickBackChart = { () => this.props.clickBackChart() }/> 
                 <div className = 'editor-wrap' >
-            <div className = "table-wrap"
-            id = 'dev-table' > { this.getCostam() } </div> 
+            <div className = "table-wrap" id = 'dev-table' > { this.getCostam() } </div> 
             <div className = "chart-wrap" >
             <div className = "select" >
             <FormIconField width = "one-fifth"
-            iconPosition = "left"
-            iconKey = "stop"
-            iconColor = {
-                this.state.nameChart === '' ?
-                "danger" :
-                    "success"
-            } >
+                            iconPosition = "left"
+                            iconKey = "stop"
+                            iconColor = { this.state.nameChart === '' ? "danger" :  "success" } >
             <FormInput placeholder = "Введите название диаграммы"
-            value = { this.state.nameChart }
-            onChange = {
-                (e) => this.updateNameChart(e) }/>
+                        value = { this.state.nameChart }
+                        onChange = { (e) => this.updateNameChart(e) }/>
                  </FormIconField>
 
             <FormSelect options = { controlCharts }
-            onChange = {
-                (e) => this.updateSelect(e) }/> 
+                         onChange = { (e) => this.updateSelect(e) }/> 
                 <Chart data = { this.state.data }
-            visibleColumns = { this.state.visibleColumns }
-            typeChart = { this.state.inputSelect }
-            isUpdateChart = { this.state.isUpdateChart }/> 
+                        visibleColumns = { this.state.visibleColumns }
+                        typeChart = { this.state.inputSelect }
+                        isUpdateChart = { this.state.isUpdateChart }
+                         isfromConstructor={false}/> 
             </div>
              </div>
               </div> 

@@ -4,13 +4,12 @@ var LineChart = require('react-d3-basic').LineChart;
 var BarChart = require('react-d3-basic').BarChart;
 var PieChart = require('react-d3-basic').PieChart;
 
-var width = 700,
-    height = 400,
+var 
     margins = {
-        left: 100,
-        right: 100,
-        top: 50,
-        bottom: 50
+        left: 30,
+        right: 30,
+        top: 10,
+        bottom: 70
     },
     xScale = 'ordinal',
     yTicks = [
@@ -28,16 +27,35 @@ var width = 700,
 
 export default class ViewChart extends Component {
 
-    constructor()
+    constructor(props)
     {
-        super()
-        this.state = {
-            data: [],
-            visibleColumns: [],
-            xLabel: "",
-            yLabel: ""
+        super(props)
+        let count = props.visibleColumns.length - 1, state={}
+        if(props.isfromConstructor)
+               state = {
+                data: props.data,
+                visibleColumns: props.visibleColumns,
+                xLabel: props.visibleColumns[count],
+                yLabel:props.visibleColumns[0],
+                width:290,
+                height: 250, 
         }
+         else 
+              state = {
+                data: [],
+                visibleColumns: [],
+                xLabel: "",
+                yLabel: "",
+                width:700,
+                height: 400, 
+        }
+         
+          
+         
+        this.state = state
     }
+
+    
 
     isNumeric(n) {
         return !isNaN(parseFloat(n)) && isFinite(n);
@@ -92,16 +110,16 @@ if (!this.isNumeric(d[column[0]]))
     getChart(typeChart) {
         switch (typeChart) {
             case 'Гистограмма':
-                return <BarChart title={title} data={this.state.data} width={width} height={height} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)} xLabel={this.state.xLabel} xScale={xScale}  yLabel={this.state.yLabel}/>
+                return <BarChart title={title} data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)} xLabel={this.state.xLabel} xScale={xScale}  yLabel={this.state.yLabel}/>
                 break;
             case 'График':
-                return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={width} height={height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
+                return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={this.state.width} height={this.state.height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
                 break;
             case 'Круговая диаграмма':
-                return <PieChart data={this.state.data} width={width} height={height} chartSeries={this.getChartSeries(this.props.visibleColumns)} value={(data, visibleColumns) => this.getDataForPieChart(this.state.data, this.props.visibleColumns)} name={name}/>
+                return <PieChart data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} value={(data, visibleColumns) => this.getDataForPieChart(this.state.data, this.props.visibleColumns)} name={name}/>
                 break;
             case 'Кольцевая диаграмма':
-                return <PieChart data={this.state.data} width={width} height={height} chartSeries={chartSeries} value={value} name={name} innerRadius={innerRadius}/>
+                return <PieChart data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={chartSeries} value={value} name={name} innerRadius={innerRadius}/>
                 break;
             default:
                 return 'Неизвестный тип'
