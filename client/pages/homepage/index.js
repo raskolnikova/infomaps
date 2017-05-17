@@ -15,8 +15,7 @@ function getStateFromFlux() {
             modalIsOpen: false,
             cancelButtonClicked: false,
              dataChart: {},
-             numberCurrentChart:-1,
-             isChoiseChart:[false,false,false,false],
+             choiseCharts:[null,null,null,null],
             dataForMap:{
                 data:{}
             }};
@@ -65,9 +64,9 @@ export default class HomePage extends Component {
  }
 
   setData(data) {
-      let isChoiseChart = this.state.isChoiseChart;
-      isChoiseChart[this.state.numberCurrentChart]=true;
-        this.setState({isChoiseChart:isChoiseChart, dataChart: data, modalIsOpen: false})
+      let choiseCharts = this.state.choiseCharts;
+      choiseCharts[this.state.numberCurrentChart]=data;
+        this.setState({choiseCharts:choiseCharts, dataChart: data, modalIsOpen: false})
     }
  
     render() {
@@ -78,10 +77,10 @@ export default class HomePage extends Component {
                 <div className="info-board">
                     <div className="panel left-chart">
                     <div id="1" className="container-chart" onClick={() => this.modalOpen(0)}>
-                        {this.state.isChoiseChart[0]
-                        ? <Chart data = { this.state.dataChart.file }
-                            visibleColumns = { this.state.dataChart.visibleColumns }
-                            typeChart = { this.state.dataChart.type }
+                        {this.state.choiseCharts[0]!==null
+                        ? <Chart data = { this.state.choiseCharts[0].file }
+                            visibleColumns = { this.state.choiseCharts[0].visibleColumns }
+                            typeChart = { this.state.choiseCharts[0].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
@@ -89,10 +88,10 @@ export default class HomePage extends Component {
                     }
                 </div>
                         <div id="2" className="container-chart" onClick={() => this.modalOpen(1)}>
-                             {this.state.isChoiseChart[1]
-                        ? <Chart data = { this.state.dataChart.file }
-                            visibleColumns = { this.state.dataChart.visibleColumns }
-                            typeChart = { this.state.dataChart.type }
+                             {this.state.choiseCharts[1]!==null
+                        ? <Chart data = { this.state.choiseCharts[1].file }
+                            visibleColumns = { this.state.choiseCharts[1].visibleColumns }
+                            typeChart = { this.state.choiseCharts[1].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
@@ -103,10 +102,10 @@ export default class HomePage extends Component {
                     <Map id_map="map"  dataForMap={this.state.dataForMap} />
                     <div className="panel right-chart">
                         <div id="3" className="container-chart" onClick={() => this.modalOpen(2)}>
-                            {this.state.isChoiseChart[2]
-                        ? <Chart data = { this.state.dataChart.file }
-                            visibleColumns = { this.state.dataChart.visibleColumns }
-                            typeChart = { this.state.dataChart.type }
+                            {this.state.choiseCharts[2]!==null
+                        ? <Chart data = { this.state.choiseCharts[2].file }
+                            visibleColumns = { this.state.choiseCharts[2].visibleColumns }
+                            typeChart = { this.state.choiseCharts[2].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
@@ -114,10 +113,10 @@ export default class HomePage extends Component {
                     }
                         </div>
                         <div id="4" className="container-chart" onClick={() => this.modalOpen(3)}>
-                             {this.state.isChoiseChart[3]
-                        ? <Chart data = { this.state.dataChart.file }
-                            visibleColumns = { this.state.dataChart.visibleColumns }
-                            typeChart = { this.state.dataChart.type }
+                             {this.state.choiseCharts[3]
+                        ? <Chart data = { this.state.choiseCharts[3].file }
+                            visibleColumns = { this.state.choiseCharts[3].visibleColumns }
+                            typeChart = { this.state.choiseCharts[3].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
