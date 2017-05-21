@@ -76,7 +76,7 @@ export default class EditorMap extends Component {
         if (this.state.buttonSave === 'button_on') {
             let map = {
                 type: this.state.inputSelect,
-                dataFile: this.state.data,
+                data: this.state.data,
                 visibleColumns: this.state.visibleColumns,
                 name: this.state.nameMap,
                 colorSchema: this.state.dataForMap.colorScheme,
@@ -95,7 +95,7 @@ export default class EditorMap extends Component {
         if (this.state.buttonSave === 'button_on') {
             let map = {
                 type: this.state.inputSelect,
-                dataFile: this.state.data,
+                data: this.state.data,
                 visibleColumns: this.state.visibleColumns,
                 name: this.state.nameMap,
                 colorSchema: this.state.dataForMap.colorScheme,
@@ -178,19 +178,27 @@ export default class EditorMap extends Component {
                       ColorScheme={ColorSchemes}
                       updateColorSchemes={(e) => this.updateSelectColorScheme(e)}
                       />
-                    <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+                    <Table data={this.state.data} columns={this.state.columns} passDataFromTableToEditor={(data, visibleColumns) => this.passDataFromTableToEditor(data, visibleColumns)}/>
                 </div>
         } else { //для открытия уже существующей карты
             this.state.idMap = this.props.dataMap.id
             this.state.nameMap = this.props.dataMap.name
             this.state.inputSelect = this.props.dataMap.type
             this.state.isUpdateMap = true;
-            this.state.data = this.props.dataMap.dataFile;
+            this.state.data = this.props.dataMap.data;
+            this.state.dataForMap =  {
+              'ISO3Column':this.props.dataMap.ISO3Column,
+              'data': this.props.dataMap.data,
+              'visibleColumns':this.props.dataMap.visibleColumns,
+              'colorScheme': this.props.dataMap.colorSchema,
+              'domen':this.props.dataMap.domen
+            }
+           
             return <div>
                 <AdditionalCostamMap handleColoringMap={(columnName,domen,colorScheme) => this.handleColoringMap(columnName,domen,colorScheme)}
                                         ColorScheme={ColorSchemes}
                                         updateColorSchemes={(e) => this.updateSelectColorScheme(e)} />
-                <Table data={this.props.dataMap.dataFile} columns={this.getColumn(this.props.dataMap.dataFile, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(dataFile, visibleColumns) => this.passDataFromTableToEditor(dataFile, visibleColumns)}/>
+                <Table data={this.props.dataMap.data} columns={this.getColumn(this.props.dataMap.data, this.props.dataMap.visibleColumns)} passDataFromTableToEditor={(data, visibleColumns) => this.passDataFromTableToEditor(data, visibleColumns)}/>
             </div>
         }
     }
@@ -236,7 +244,7 @@ export default class EditorMap extends Component {
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>
 }
-                            <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice}/>
+                            <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>
                     </div>
                 </div>

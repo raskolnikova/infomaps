@@ -13,11 +13,13 @@ function formatMap(map) {
     return {
         id: map._id,
         name: map.name,
-        dataFile:map.dataFile,
+        data:map.data,
         type:map.type,
         visibleColumns:map.visibleColumns,
         colorSchema:map.colorSchema,
-        createdAt: map.createdAt
+        createdAt: map.createdAt,
+        domen:map.domen,
+        ISO3Column:map.ISO3Column
     };
 }
 

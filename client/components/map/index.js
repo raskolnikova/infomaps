@@ -6,7 +6,7 @@ import L from 'leaflet'
 import './index.less'
 import '../../../node_modules/leaflet/dist/leaflet.css'
 
-var d3 = require('d3');
+
 
 const ColorSchemes = [
     [
@@ -56,7 +56,12 @@ export default class Map extends Component {
             info: {},
             legend:{},
             visibleColumns: [],
-            dataForMap: {},
+            dataForMap: {
+                 visibleColumns: [],
+                   colorScheme:0,
+                    domen:[10000000,1000000,100000,10000,1000,100],
+                    ISO3Column:''
+            },
             colorScheme:0,
             domen:[10000000,1000000,100000,10000,1000,100]
         }
@@ -69,7 +74,7 @@ export default class Map extends Component {
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
         let geoJSON = L.geoJSON(this.state.geoJSONMap, {
-            style: (feature) => this.getStyle(feature),
+            style: (feature,dataForMap) => this.getStyle(feature,this.state.dataForMap),
             onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
         }).addTo(map)
 
@@ -81,8 +86,6 @@ export default class Map extends Component {
         let legend = L.control({position: 'bottomright'});
         legend.onAdd = () => this.legendAdd(this.getColor,this.state.domen)
         legend.addTo(map);
-
-
 
         this.setState({geoJSON: geoJSON, map: map, info: info, legend:legend})
     }
@@ -129,22 +132,21 @@ export default class Map extends Component {
         }
     }
 
-updateNotice(notic){
- let map = this.state.map;
-          map.removeControl(this.state.info)
-    let info = L.control();
+    updateNotice(notic) {
+        let map = this.state.map;
+        map.removeControl(this.state.info)
+        let info = L.control();
         info.onAdd = (map) => this.infoAdd(map)
-        info.update = (props,notice) => this.infoUpdate(props,notic)
+        info.update = (props, notice) => this.infoUpdate(props, notic)
         info.addTo(map)
-this.setState({map:map,info:info})
-}
+        this.setState({ map: map, info: info })
+    }
 
     updateDataMap(dataForMap) {
           let map = this.state.map,
            data = dataForMap.data,
             typeMap = this.state.typeMap,
             geoJSON = {}
-
 
              map.removeControl(this.state.legend)
                let legend = L.control({position: 'bottomright'});
@@ -159,18 +161,20 @@ this.setState({map:map,info:info})
                 }
             )
 
-        this.setState({visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme,domen:dataForMap.domen})
-
+        this.setState({ visibleColumns: dataForMap.visibleColumns, colorScheme: dataForMap.colorScheme, domen: dataForMap.domen })
+        var self = dataForMap;
 
         geoJSON = L.geoJSON(this.getTypeMap(typeMap), {
-            style: (feature) => this.getStyle(feature),
+            style: (feature, dataForMap) => this.getStyle(feature, self),
             onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
-        }).addTo(map)
+        }
+        ).addTo(map)
 
 
         this.setState({map: map, geoJSON: geoJSON,legend:legend})
 
     }
+    
 
     isEmptyObject(obj) {
         for (let i in obj) {
@@ -198,9 +202,9 @@ this.setState({map:map,info:info})
                                     : '#FFE';
     }
 
-    getStyle(feature) {
+    getStyle(feature,dataForMap) {
         return {
-            fillColor: this.getColor(feature.properties[this.state.visibleColumns[0]],this.state.colorScheme,this.state.domen),
+            fillColor: this.getColor(feature.properties[dataForMap.visibleColumns[0]],dataForMap.colorScheme,dataForMap.domen),
             weight: 2,
             opacity: 1,
             color: 'grey',

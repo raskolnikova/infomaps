@@ -11,11 +11,13 @@ export function listMap() {
 export function createMap(data) {
     const map = new Map({
         name: data.name,
-        dataFile: data.dataFile,
+        data: data.data,
         type: data.type,
         colorSchema: data.colorSchema,
         createdAt: data.createdAt,
-        visibleColumns: data.visibleColumns
+        visibleColumns: data.visibleColumns,
+        domen:data.domen,
+        ISO3Column:data.ISO3Column
     });
     return map.save();
 }
@@ -28,11 +30,13 @@ export function updateMap(id, data) {
     return Map.findByIdAndUpdate(id, {
         $set: {
             name: data.name,
-            dataFile: data.dataFile,
-            type: data.type,
-            colorSchema: data.colorSchema,
-            createdAt: data.createdAt,
-            visibleColumns: data.visibleColumns
+        data: data.data,
+        type: data.type,
+        colorSchema: data.colorSchema,
+        createdAt: data.createdAt,
+        visibleColumns: data.visibleColumns,
+        domen:data.domen,
+        ISO3Column:data.ISO3Column
         }
     });
 }
