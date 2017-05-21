@@ -11,7 +11,7 @@ import ListScripts from '../../components/list-scripts'
 
 
 function getStateFromFlux() {
-  return {isLoading: ScriptStore.isLoading(), displayedScripts: ScriptStore.getScripts(), isNewScript:false,nameScript:''};
+  return {isLoading: ScriptStore.isLoading(), displayedScripts: ScriptStore.getScripts(), scripts: ScriptStore.getScripts(), isNewScript:false,nameScript:''};
 }
 
 
@@ -55,7 +55,7 @@ handleAddNameScript(name){
 
     handleSearch(e){
             var searchQuery = e.target.value.toLowerCase();
-                var displayedScripts = scripts.filter(function(el){
+                var displayedScripts = this.state.scripts.filter(function(el){
                     var searchValue = el.name.toLowerCase();
                     return searchValue.indexOf(searchQuery) !== -1;
                 })
