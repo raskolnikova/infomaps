@@ -119,7 +119,7 @@ export default class Map extends Component {
         this.updateNotice(nextProps.notice)
 
         if (!this.isEmptyObject(nextProps.dataForMap.data))
-            this.updateDataMap(nextProps.dataForMap)
+            this.updateDataMap(nextProps.dataForMap,nextProps.typeMap)
     }
 
     updateTypeMap(typeMap) {
@@ -142,10 +142,9 @@ export default class Map extends Component {
         this.setState({ map: map, info: info })
     }
 
-    updateDataMap(dataForMap) {
+    updateDataMap(dataForMap,typeMap) {
           let map = this.state.map,
            data = dataForMap.data,
-            typeMap = this.state.typeMap,
             geoJSON = {}
 
              map.removeControl(this.state.legend)

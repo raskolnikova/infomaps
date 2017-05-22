@@ -39,7 +39,7 @@ constructor(){
             <FormSelect options={this.props.ColorScheme} onChange={(e) => this.updateColorSchemes(e)}/>
           </div>
           <div className='domen'>
-         <div > Введите значения для расскраски карты</div>
+         <div>Введите границы интервалов значений для заданной цветовой схемы</div>
             <input  className="domen-input" type="text"  onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,0)}/>
             <input  className="domen-input" type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,1)} />
             <input  className="domen-input" type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,2)}/>
