@@ -160,9 +160,9 @@ export default class HomePage extends Component {
                     }
                         </div>
                     </div>
-
-                    <Map id_map="map"  dataForMap={this.state.dataForMap}  typeMap={this.state.choiseMap.type} isUpdateMap={this.state.isUpdateMap} notice={''}/>
-
+                    <div className={this.state.modalIsOpen?"map-not-available":"map-available"} > 
+                        <Map id_map="map" dataForMap={this.state.dataForMap}  typeMap={this.state.choiseMap.type} isUpdateMap={this.state.isUpdateMap} notice={''}/>
+                    </div>
                     <div className="panel right-chart">
                         <div id="3" className="container-chart" onClick={() => this.modalOpen(2)}>
                             {this.state.choiseCharts[2]!==null

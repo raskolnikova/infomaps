@@ -3,6 +3,8 @@ import USMap from '../../../geodata/countries/us_states.json'
 import WorldMap from '../../../geodata/countries/World.json'
 import RUSMap from '../../../geodata/countries/russia.json'
 import L from 'leaflet'
+import '../../../node_modules/leaflet-contextmenu/dist/leaflet.contextmenu.js'
+import '../../../node_modules/leaflet-contextmenu/dist/leaflet.contextmenu.css'
 import './index.less'
 import '../../../node_modules/leaflet/dist/leaflet.css'
 
@@ -68,10 +70,30 @@ export default class Map extends Component {
     }
 
     componentDidMount() {
-        let map = L.map(this.props.id_map).setView([
-            51.7, 36.6
-        ], 2);
+
+       //проблема с webpack для отображения маркера
+        delete L.Icon.Default.prototype._getIconUrl;
+
+        L.Icon.Default.mergeOptions({
+        iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+        iconUrl: require('leaflet/dist/images/marker-icon.png'),
+        shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
+        });
+
+        let map = L.map(this.props.id_map, {
+            center: new L.LatLng(51.7,36.6),
+             zoom: 2,
+            contextmenu: true,
+            contextmenuWidth: 140,
+            contextmenuItems: [{
+                text: 'Добавить маркер',
+                callback: this.showCoordinates
+            }]
+        });
+
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+
+  L.marker([51.5, -0.09]).addTo(map);	
 
         let geoJSON = L.geoJSON(this.state.geoJSONMap, {
             style: (feature,dataForMap) => this.getStyle(feature,this.state.dataForMap),
@@ -86,6 +108,8 @@ export default class Map extends Component {
         let legend = L.control({position: 'bottomright'});
         legend.onAdd = () => this.legendAdd(this.getColor,this.state.domen)
         legend.addTo(map);
+
+
 
         this.setState({geoJSON: geoJSON, map: map, info: info, legend:legend})
     }
@@ -113,6 +137,9 @@ export default class Map extends Component {
         return div;
     }
 
+ showCoordinates (e) {
+      
+}
 
     componentWillReceiveProps(nextProps) {  
         this.updateTypeMap(nextProps.typeMap)

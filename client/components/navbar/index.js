@@ -54,11 +54,8 @@ export default class NavBar extends Component {
                 </Link>
                 <div className="user">  
                  
-               
-                 <Link to='/'>
-                            <div className='inscription'>Пользователь</div>
-                </Link>
-                 <Link to='/'>
+                            <div className='inscription'>Liska_148@mail.ru</div>
+                 <Link to='/login'>
                             <div className='inscription'>Выход</div>
                 </Link>
                 </div>
