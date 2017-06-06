@@ -88,12 +88,14 @@ export default class Map extends Component {
             contextmenuItems: [{
                 text: 'Добавить маркер',
                 callback: this.showCoordinates
+            },
+            {
+                text: 'Добавить текст',
+                callback: this.showCoordinates
             }]
         });
 
         L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-
-  L.marker([51.5, -0.09]).addTo(map);	
 
         let geoJSON = L.geoJSON(this.state.geoJSONMap, {
             style: (feature,dataForMap) => this.getStyle(feature,this.state.dataForMap),
@@ -138,7 +140,8 @@ export default class Map extends Component {
     }
 
  showCoordinates (e) {
-      
+     console.log(this.state)
+      L.marker(e.latlng).addTo(L.map);	
 }
 
     componentWillReceiveProps(nextProps) {  

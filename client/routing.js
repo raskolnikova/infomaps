@@ -37,7 +37,7 @@ export const routes = (
             <Route path='editor-map' component={EditorMap}/>
         </Route>
         <Route path='/datasets' component={Datasets}/>
-        <Route path='/scripts' component={Scripts} onEnter={checkLogin}/>
+        <Route path='/scripts' component={Scripts} />
         <Route path='/registration' component={Registration}/>
         <Route path='/login' component={Login}/>
         <Route path='*' component={NotFound}/>

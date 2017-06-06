@@ -3,6 +3,8 @@ import NavEditorMap from '../../components/nav-editor-map/index'
 import Table from '../../components/table/index'
 import Map from '../../components/map/index'
 import CostamizationEmptyTable from '../../components/costamization_empty_table'
+import Player from '../../components/player'
+import Timeline from '../../components/timeline'
 import AdditionalCostamMap from '../../components/additional_costam_map'
 import {FormSelect, FormInput, FormIconField, Button} from 'elemental'
 
@@ -242,8 +244,9 @@ export default class EditorMap extends Component {
                             </FormIconField>
                             {this.state.isAddNotice
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
-                                : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>
-}
+                                : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>}
+                                <Player/>
+                                <Timeline/>
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>
                     </div>
