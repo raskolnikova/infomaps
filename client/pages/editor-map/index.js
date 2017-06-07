@@ -214,14 +214,36 @@ export default class EditorMap extends Component {
     }
 
     handleColoringMap(columnName, domen, colorScheme) {
-        let dataForMap = {
-            'ISO3Column': columnName,
-            'data': this.state.data,
-            'visibleColumns': this.state.visibleColumns,
-            'colorScheme': colorScheme,
-            'domen': domen
+        if(this.state.visibleColumns.length >= 2){
+            var i = 0;
+            var timerId = setInterval(() => {
+                if(i!=this.state.visibleColumns.length-1){
+                    let currentVisibleColumn = [];
+                        currentVisibleColumn[0]=this.state.visibleColumns[i];
+                        i++;
+                this.setState({dataForMap:{
+                                'ISO3Column': columnName,
+                                'data': this.state.data,
+                                'visibleColumns':currentVisibleColumn,
+                                'colorScheme': colorScheme,
+                                'domen': domen
+                }});
+            } 
+            else clearInterval(timerId);  
+            console.log("in timer") 
+    },200);
         }
-        this.setState({ dataForMap: dataForMap })
+            else {
+            console.log("out timer") 
+                let dataForMap = {
+                    'ISO3Column': columnName,
+                    'data': this.state.data,
+                    'visibleColumns': this.state.visibleColumns,
+                    'colorScheme': colorScheme,
+                    'domen': domen
+                }
+                this.setState({ dataForMap: dataForMap })
+            }
     }
 
 

@@ -12,12 +12,12 @@ import '../../../node_modules/leaflet/dist/leaflet.css'
 
 const ColorSchemes = [
     [
-        '#ffffb2',
-        '#fed976',
-        '#feb24c',
-        '#fd8d3c',
+        '#bd0026',
         '#f03b20',
-        '#bd0026'
+        '#fd8d3c',
+        '#feb24c',
+        '#fed976',
+        '#ffffb2',
     ],
     [
         '#eff3ff',
@@ -110,9 +110,6 @@ export default class Map extends Component {
         let legend = L.control({position: 'bottomright'});
         legend.onAdd = () => this.legendAdd(this.getColor,this.state.domen)
         legend.addTo(map);
-
-
-
         this.setState({geoJSON: geoJSON, map: map, info: info, legend:legend})
     }
 
