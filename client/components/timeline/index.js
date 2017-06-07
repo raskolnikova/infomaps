@@ -4,15 +4,18 @@ import './index.less'
 
 export default class Timeline extends Component {
 
+    renderYears(visibleColumns){
+          const listYears = visibleColumns.map((year) => 
+               <li>{year}</li>
+            );
+            return  <ul className="timeline">{listYears}</ul>
+    }
+
     render() {
         return (
-            <ul className="timeline">
-                <li>2010</li>
-                <li>2011</li>
-                <li>2012</li>
-                <li>2013</li>
-                <li>2014</li>
-            </ul>
+           <div>
+               {this.renderYears(this.props.visibleColumns)}
+            </div>
         )
     }
 }

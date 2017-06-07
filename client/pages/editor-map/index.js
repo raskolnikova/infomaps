@@ -230,11 +230,9 @@ export default class EditorMap extends Component {
                 }});
             } 
             else clearInterval(timerId);  
-            console.log("in timer") 
     },200);
         }
             else {
-            console.log("out timer") 
                 let dataForMap = {
                     'ISO3Column': columnName,
                     'data': this.state.data,
@@ -268,7 +266,7 @@ export default class EditorMap extends Component {
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>}
                                 <Player/>
-                                <Timeline/>
+                                <Timeline visibleColumns = {this.state.visibleColumns}/>
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>
                     </div>
