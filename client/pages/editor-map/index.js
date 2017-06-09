@@ -66,7 +66,8 @@ export default class EditorMap extends Component {
               'visibleColumns':[],
               'colorScheme': 0,
               'domen':[1000000,100000,10000,1000,100,10]
-            }
+            },
+            timelineColumns:[]
         }
     }
 
@@ -214,34 +215,23 @@ export default class EditorMap extends Component {
     }
 
     handleColoringMap(columnName, domen, colorScheme) {
-        if(this.state.visibleColumns.length >= 2){
-            var i = 0;
-            var timerId = setInterval(() => {
-                if(i!=this.state.visibleColumns.length-1){
-                    let currentVisibleColumn = [];
-                        currentVisibleColumn[0]=this.state.visibleColumns[i];
-                        i++;
-                this.setState({dataForMap:{
-                                'ISO3Column': columnName,
-                                'data': this.state.data,
-                                'visibleColumns':currentVisibleColumn,
-                                'colorScheme': colorScheme,
-                                'domen': domen
-                }});
-            } 
-            else clearInterval(timerId);  
-    },200);
-        }
-            else {
-                let dataForMap = {
-                    'ISO3Column': columnName,
-                    'data': this.state.data,
-                    'visibleColumns': this.state.visibleColumns,
-                    'colorScheme': colorScheme,
-                    'domen': domen
-                }
-                this.setState({ dataForMap: dataForMap })
+        var i = 0;
+        var timerId = setInterval(() => {
+            if (i <= this.state.visibleColumns.length-1) {
+                let currentVisibleColumn = [];
+                currentVisibleColumn[0] = this.state.visibleColumns[i];
+                this.setState({
+                    dataForMap: {
+                        'ISO3Column': columnName,
+                        'data': this.state.data,
+                        'visibleColumns': currentVisibleColumn,
+                        'colorScheme': colorScheme,
+                        'domen': domen
+                    } });
+                i++;
             }
+            else clearInterval(timerId);
+        }, 50);
     }
 
 
@@ -266,7 +256,7 @@ export default class EditorMap extends Component {
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>}
                                 <Player/>
-                                <Timeline visibleColumns = {this.state.visibleColumns}/>
+                                <Timeline visibleColumns = {this.state.visibleColumns} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>
                     </div>
