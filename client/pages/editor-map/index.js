@@ -67,7 +67,8 @@ export default class EditorMap extends Component {
               'colorScheme': 0,
               'domen':[1000000,100000,10000,1000,100,10]
             },
-            timelineColumns:[]
+            timelineColumns:[],
+            currentTimeIndex:0
         }
     }
 
@@ -215,11 +216,8 @@ export default class EditorMap extends Component {
     }
 
     handleColoringMap(columnName, domen, colorScheme) {
-        var i = 0;
-        var timerId = setInterval(() => {
-            if (i <= this.state.visibleColumns.length-1) {
-                let currentVisibleColumn = [];
-                currentVisibleColumn[0] = this.state.visibleColumns[i];
+       let currentVisibleColumn = [];
+                currentVisibleColumn[0] = this.state.visibleColumns[0];
                 this.setState({
                     dataForMap: {
                         'ISO3Column': columnName,
@@ -228,12 +226,37 @@ export default class EditorMap extends Component {
                         'colorScheme': colorScheme,
                         'domen': domen
                     } });
-                i++;
-            }
-            else clearInterval(timerId);
-        }, 50);
     }
 
+    handlePlaying() {
+        var i = this.state.currentTimeIndex;
+        var timerId = setInterval(() => {
+            if (i <= this.state.visibleColumns.length-1) {
+                console.log(this.state.currentTimeIndex)
+                let currentVisibleColumn = [];
+                currentVisibleColumn[0] = this.state.visibleColumns[i];
+
+                var newData = {
+                        'ISO3Column': this.state.dataForMap.ISO3Column,
+                        'data': this.state.data,
+                        'visibleColumns': currentVisibleColumn,
+                        'colorScheme': this.state.dataForMap.colorScheme,
+                        'domen': this.state.dataForMap.domen
+                    }
+                i++;
+                this.setState({dataForMap: newData,currentTimeIndex:i})
+            }
+            else {
+                clearInterval(timerId);
+                 this.setState({currentTimeIndex:0})
+            }
+        }, 50);
+            this.setState({timerId: timerId})
+    }
+
+    handleStoping() {
+        clearInterval(this.state.timerId);
+    }
 
         render() {
             return (
@@ -255,7 +278,7 @@ export default class EditorMap extends Component {
                             {this.state.isAddNotice
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>}
-                                <Player/>
+                                <Player onPlay = {() => this.handlePlaying()} onStop = {() => this.handleStoping()}/>
                                 <Timeline visibleColumns = {this.state.visibleColumns} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>
