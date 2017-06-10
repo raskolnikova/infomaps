@@ -6,20 +6,17 @@ var PieChart = require('react-d3-basic').PieChart;
 
 var 
     margins = {
-        left: 30,
-        right: 30,
+        left: 70,
+        right: 0,
         top: 10,
-        bottom: 70
+        bottom: 30
     },
-    xScale = 'ordinal',
-    yTicks = [
-        10, "%"
-    ],
-    title = "User sample",
+    
+    xScale = 'linear',
+   
+    title = "",
 
-    // value = function(d) {
-    //     return + d.population;
-    // },
+    
      name = function(d) {
         return d;
      },
@@ -35,9 +32,9 @@ export default class ViewChart extends Component {
                state = {
                 data: props.data,
                 visibleColumns: props.visibleColumns,
-                xLabel: props.visibleColumns[count],
-                yLabel:props.visibleColumns[0],
-                width:290,
+                xLabel:"",
+                yLabel:"",
+                width:350,
                 height: 250, 
         }
          else 
@@ -111,16 +108,12 @@ if (!this.isNumeric(d[column[0]]))
         switch (typeChart) {
             case 'Гистограмма':
                 return <BarChart title={title} data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)} xLabel={this.state.xLabel} xScale={xScale}  yLabel={this.state.yLabel}/>
-                break;
             case 'График':
                 return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={this.state.width} height={this.state.height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
-                break;
             case 'Круговая диаграмма':
                 return <PieChart data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} value={(data, visibleColumns) => this.getDataForPieChart(this.state.data, this.props.visibleColumns)} name={name}/>
-                break;
             case 'Кольцевая диаграмма':
                 return <PieChart data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={chartSeries} value={value} name={name} innerRadius={innerRadius}/>
-                break;
             default:
                 return 'Неизвестный тип'
         }
@@ -130,17 +123,14 @@ if (!this.isNumeric(d[column[0]]))
         let count = nextProps.visibleColumns.length - 1
         if(nextProps.isUpdateChart){
           this.setState({data: nextProps.data,
-                        visibleColumns: nextProps.visibleColumns,
-                        xLabel: nextProps.visibleColumns[count],
-                        yLabel: nextProps.visibleColumns[0]})
+                        visibleColumns: nextProps.visibleColumns
+                        })
         } else
         if (nextProps.data !== this.state.data)
             this.setState({data: nextProps.data});
         else if(count > 0)
         {
-            this.setState({visibleColumns: nextProps.visibleColumns,
-                          xLabel: nextProps.visibleColumns[count],
-                          yLabel: nextProps.visibleColumns[0]})
+            this.setState({visibleColumns: nextProps.visibleColumns})
             }
 
           }

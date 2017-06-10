@@ -20,14 +20,14 @@ import {Route, IndexRoute} from 'react-router'
 
 function checkLogin(nextState, replace) {
   const login = window.localStorage.getItem('rr_login')
-  if (login !== 'Radiona') {
+  if (login !== 'Liska_148@mail.ru') {
        replace('/registration')
   }
 }
 
 export const routes = (
     <div>
-        <Route path='/' component={HomePage}/>
+        <Route path='/' component={HomePage} onEnter={checkLogin}/>
         <Route path='container-charts' >
             <IndexRoute component={ContainerCharts} />
             <Route path='editor-chart' component={EditorChart}/>

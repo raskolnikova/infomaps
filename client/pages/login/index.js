@@ -21,9 +21,9 @@ export default class Login extends Component {
     }
 
     handleCheckUser() {
-// e.preventDefault()
-   // const value = this.state.email
-   // window.localStorage.setItem('rr_login', value)
+ //e.preventDefault()
+    const value = this.state.email
+    window.localStorage.setItem('rr_login', value)
    if(this.validateEmail(this.state.email) && this.validatePassword(this.state.password)){
              this.setState({isNotValidEmail:false,isNotValidPassword:false })
              const user = {email:this.state.email,password:this.state.password,scripts:[],maps:[],charts:[]}
@@ -38,7 +38,6 @@ export default class Login extends Component {
                     else this.setState({isNotValidPassword:false})
                     
              }
-       UserActions.checkUser(this.state);
     }
 
     validateEmail(email) {
@@ -70,7 +69,7 @@ handleAddPassword(password){
           <h2>Infomaps</h2>
              <FormField label="Введите email" htmlFor="horizontal-form-input-email">
             <FormIconField width="one-half" iconPosition="left" iconColor={this.state.isExistUser||this.state.isNotValidEmail?"danger":"default"} iconKey={this.state.isExistUser?"stop":"mail"}>
-                <FormInput type="email"  name="icon-alignment-left" onChange={(e) => this.handleAddEmail(e.target.value)} />
+                <FormInput type="email"  name="icon-alignment-left" onChange={(e) => this.handleAddUserName(e.target.value)} />
 		</FormIconField>
             </FormField>
            { (this.state.isExistUser)?

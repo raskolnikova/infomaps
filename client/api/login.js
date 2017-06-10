@@ -5,7 +5,7 @@ import { apiPrefix } from '../../etc/config.json';
 export default {
 
 
-     checkUsers(data) {
+     checkUser(data) {
          return axios.post(`${apiPrefix}/login`, data);
      },
 

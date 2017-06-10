@@ -171,8 +171,9 @@ export default class HomePage extends Component {
                 </div>
                 <Player onPlay = {() => this.handlePlaying()}
                                             onStop = {() => this.handleStoping()}/>
-                <Timeline visibleColumns = {this.state.visibleColumnsMap} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
-
+                <div className="center-timeline">
+                    <Timeline visibleColumns = {this.state.visibleColumnsMap} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
+                </div>
 
                 <div className="info-board">
                     <div className="panel left-chart">
