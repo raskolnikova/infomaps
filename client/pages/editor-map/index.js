@@ -232,7 +232,6 @@ export default class EditorMap extends Component {
         var i = this.state.currentTimeIndex;
         var timerId = setInterval(() => {
             if (i <= this.state.visibleColumns.length-1) {
-                console.log(this.state.currentTimeIndex)
                 let currentVisibleColumn = [];
                 currentVisibleColumn[0] = this.state.visibleColumns[i];
 
@@ -258,6 +257,25 @@ export default class EditorMap extends Component {
         clearInterval(this.state.timerId);
     }
 
+   /*  handleBackward() {
+
+          clearInterval(this.state.timerId);
+          var newData = {
+                        'ISO3Column': this.state.dataForMap.ISO3Column,
+                        'data': this.state.data,
+                        'visibleColumns': this.state.currentVisibleColumn--,
+                        'colorScheme': this.state.dataForMap.colorScheme,
+                        'domen': this.state.dataForMap.domen
+                    }
+
+
+           this.setState((prevState)=>{ return {currentTimeIndex: prevState.currentTimeIndex--,dataForMap: newData}})
+    }
+
+     handleForward() {
+        clearInterval(this.state.timerId);
+    }*/
+
         render() {
             return (
                 <div>
@@ -278,7 +296,9 @@ export default class EditorMap extends Component {
                             {this.state.isAddNotice
                                 ? <FormInput placeholder="Введите текст" value ={this.props.dataMap.name} onChange={(e) => this.updateNotice(e)}/>
                                 : <Button type="success" onClick={() => this.handleAddNotice()}>Добавить примечание</Button>}
-                                <Player onPlay = {() => this.handlePlaying()} onStop = {() => this.handleStoping()}/>
+                                <Player onPlay = {() => this.handlePlaying()}
+                                        onStop = {() => this.handleStoping()}
+                                        onBackward = {() => this.handleBackward()}/>
                                 <Timeline visibleColumns = {this.state.visibleColumns} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
                             <Map id_map="map_edit" dataForMap={this.state.dataForMap} typeMap={this.state.inputSelect} isUpdateMap={this.state.isUpdateMap} notice={this.state.notice} />
                         </div>

@@ -8,6 +8,8 @@ import MapStore from './../../stores/MapStore'
 import MapActions from '../../action/MapAction'
 import ListChart from '../../components/list-chart'
 import Chart from '../../components/chart'
+import Player from '../../components/player'
+import Timeline from '../../components/timeline'
 
 import './index.less'
 
@@ -38,13 +40,15 @@ function getStateFromFlux() {
         maps: MapStore.getMaps(),
          isUpdateMap: false,
         choiseMap:  {},
+        visibleColumnsMap:[],
          dataForMap: {
               'ISO3Column':'',
               'data': [],
               'visibleColumns':[],
               'colorScheme': 0,
               'domen':[1000000,100000,10000,1000,100,10]
-            }
+            },
+            currentTimeIndex:0
     };
 }
 
@@ -105,12 +109,15 @@ export default class HomePage extends Component {
     updateSelect(option) {
         for(let i=0;i<this.state.maps.length;i++){
             if(this.state.maps[i].name===option){
+                let currentVisibleColumns =[];
+                currentVisibleColumns[0]=this.state.maps[i].visibleColumns[0];
+
                 this.setState({ choiseMap: this.state.maps[i],
-                     isUpdateMap:true,
+                     visibleColumnsMap:this.state.maps[i].visibleColumns,
                 dataForMap: {
                     'ISO3Column':this.state.maps[i].ISO3Column,
                     'data':this.state.maps[i].data ,
-                    'visibleColumns':this.state.maps[i].visibleColumns,
+                    'visibleColumns':currentVisibleColumns,
                     'colorScheme': this.state.maps[i].colorSchema[0],
                     'domen':this.state.maps[i].domen
             }
@@ -123,72 +130,119 @@ export default class HomePage extends Component {
         
     }
 
+     handlePlaying() {
+        var i = this.state.currentTimeIndex;
+        var timerId = setInterval(() => {
+            if (i <= this.state.visibleColumnsMap.length-1) {
+                let currentVisibleColumn = [];
+                currentVisibleColumn[0] = this.state.visibleColumnsMap[i];
+
+                var newData = {
+                        'ISO3Column': this.state.dataForMap.ISO3Column,
+                        'data': this.state.dataForMap.data,
+                        'visibleColumns': currentVisibleColumn,
+                        'colorScheme': this.state.dataForMap.colorScheme,
+                        'domen': this.state.dataForMap.domen
+                    }
+                i++;
+                this.setState({dataForMap: newData,currentTimeIndex:i})
+            }
+            else {
+                clearInterval(timerId);
+                 this.setState({currentTimeIndex:0})
+            }
+        }, 300);
+            this.setState({timerId: timerId})
+    }
+
+    handleStoping() {
+        clearInterval(this.state.timerId);
+    }
+
+
  
     render() {
         return (
             <div>
                 <NavBar/>
-<div className="select-input">
-   <FormSelect options = { this.state.controlMaps }
-                         onChange = { (e) => this.updateSelect(e) }/> 
-</div>
-
+                <div className="select-input">
+                <FormSelect options = { this.state.controlMaps }
+                                onChange = { (e) => this.updateSelect(e) }/> 
+                </div>
+                <Player onPlay = {() => this.handlePlaying()}
+                                            onStop = {() => this.handleStoping()}/>
+                <Timeline visibleColumns = {this.state.visibleColumnsMap} currentVisibleColumn={this.state.dataForMap.visibleColumns}/>
 
 
                 <div className="info-board">
                     <div className="panel left-chart">
                     <div id="1" className="container-chart" onClick={() => this.modalOpen(0)}>
                         {this.state.choiseCharts[0]!==null
-                        ? <Chart data = { this.state.choiseCharts[0].file }
+                        ? <div>
+                        <Chart data = { this.state.choiseCharts[0].file }
                             visibleColumns = { this.state.choiseCharts[0].visibleColumns }
                             typeChart = { this.state.choiseCharts[0].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
+                            <div className="chart-name">{this.state.choiseCharts[0].name} </div>
+                            </div>
                         :  <i className="fa fa-plus fa-5x icon-plus"></i>
                     }
                 </div>
                         <div id="2" className="container-chart" onClick={() => this.modalOpen(1)}>
                              {this.state.choiseCharts[1]!==null
-                        ? <Chart data = { this.state.choiseCharts[1].file }
+                        ? 
+                        <div> 
+                        <Chart data = { this.state.choiseCharts[1].file }
                             visibleColumns = { this.state.choiseCharts[1].visibleColumns }
                             typeChart = { this.state.choiseCharts[1].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
+                            <div className="chart-name">{this.state.choiseCharts[1].name} </div>                            
+                            </div>
                         :  <i className="fa fa-plus fa-5x icon-plus"></i>
                     }
                         </div>
                     </div>
+
                     <div className={this.state.modalIsOpen?"map-not-available":"map-available"} > 
                         <Map id_map="map" dataForMap={this.state.dataForMap}  typeMap={this.state.choiseMap.type} isUpdateMap={this.state.isUpdateMap} notice={''}/>
                     </div>
+
                     <div className="panel right-chart">
                         <div id="3" className="container-chart" onClick={() => this.modalOpen(2)}>
                             {this.state.choiseCharts[2]!==null
-                        ? <Chart data = { this.state.choiseCharts[2].file }
-                            visibleColumns = { this.state.choiseCharts[2].visibleColumns }
-                            typeChart = { this.state.choiseCharts[2].type }
-                            isUpdateChart = { true }
-                            isfromConstructor={true}
+                            ? <div> <Chart data = { this.state.choiseCharts[2].file }
+                                visibleColumns = { this.state.choiseCharts[2].visibleColumns }
+                                typeChart = { this.state.choiseCharts[2].type }
+                                isUpdateChart = { true }
+                                isfromConstructor={true}
                             /> 
+                            <div className="chart-name">{this.state.choiseCharts[2].name} </div>
+                            </div>
                         :  <i className="fa fa-plus fa-5x icon-plus"></i>
                     }
                         </div>
                         <div id="4" className="container-chart" onClick={() => this.modalOpen(3)}>
                              {this.state.choiseCharts[3]
-                        ? <Chart data = { this.state.choiseCharts[3].file }
+                        ? 
+                        <div>
+                        <Chart data = { this.state.choiseCharts[3].file }
                             visibleColumns = { this.state.choiseCharts[3].visibleColumns }
                             typeChart = { this.state.choiseCharts[3].type }
                             isUpdateChart = { true }
                             isfromConstructor={true}
                             /> 
+                            <div className="chart-name">{this.state.choiseCharts[3].name} </div>
+                            </div>
                         :  <i className="fa fa-plus fa-5x icon-plus"></i>
                     }
                         </div>
                     </div>
                 </div>
-                <Modal isOpen={this.state.modalIsOpen} onCancel={()=>this.modalOpen()} backdropClosesModal>
+                <Modal isOpen={this.state.modalIsOpen} onCancel={()=>this.modalOpen()} backdropClosesModal  width="large">
                     <ModalHeader text="Выберете диаграмму" showCloseButton onClose={()=>this.modalOpen()}/>
                     <ModalBody>
                         <ListChart charts={this.state.charts}  onChartDelete = {this.handleChartDelete} onOpenChart = { (data) => this.setChart(data)}/>

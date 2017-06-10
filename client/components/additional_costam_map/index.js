@@ -2,8 +2,6 @@ import React, {Component} from 'react'
 import {FormSelect, FormInput, FormIconField, Button} from 'elemental'
 import './index.less'
 
-
-
 export default class AdditionalCostamMap extends Component {
 
 constructor(){
@@ -48,7 +46,6 @@ constructor(){
             <input  className="domen-input" type="text" onChange={(e,countInput) => this.handelUpdateDomen(e.target.value,5)}/>
           </div>
           <Button type="success" onClick={(columnName,domen,colorScheme) => this.props.handleColoringMap(this.state.columnName,this.state.domen,this.state.colorScheme)}>Раскрасить карту</Button>
-          <Button type="success">Добавить геопривязку</Button>
           </div>
       )
   }
