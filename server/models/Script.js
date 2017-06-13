@@ -14,6 +14,10 @@ const ScriptSchema = new Schema({
     maps:[ {
         type: Schema.Types.ObjectId,
         ref: 'Map'
+    }],
+      datasets:[ {
+        type: Schema.Types.ObjectId,
+        ref: 'DataSet'
     }]
 });
 

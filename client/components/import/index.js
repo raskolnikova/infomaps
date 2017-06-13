@@ -105,7 +105,7 @@ export default class Import extends Component {
                 </button>
 
                 <Modal isOpen={this.state.modalIsOpen} onCancel={this.modalOpen} backdropClosesModal>
-                    <ModalHeader text="Lots of text to show scroll behavior" showCloseButton onClose={this.modalOpen}/>
+                    <ModalHeader text="Импорт данных" showCloseButton onClose={this.modalOpen}/>
                     <ModalBody>
                         <FileInput readAs='text' onLoadStart={this.showProgressBar} onLoad={this.handleFileSelected} onProgress={this.updateProgressBar} onCancel={this.showInvalidFileTypeMessage} abortIf={this.cancelButtonClicked} onAbort={this.resetCancelButtonClicked}>
                             Нажмите здесь для выбора файла

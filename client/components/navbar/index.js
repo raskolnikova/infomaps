@@ -16,11 +16,11 @@ export default class NavBar extends Component {
                   <div className='button'>
                       <div className='wrap-but'>
                           <i className="fa fa-home fa-3x"></i>
-                          <div className='inscription'>На главную</div>
+                          <div className='inscription'>Сценарии</div>
                       </div>
                   </div>
               </Link>
-              <Link to='/'>
+              <Link to='/constructor'>
                   <div className='button'>
                       <div className='wrap-but'>
                           <i className="fa fa-puzzle-piece fa-3x"></i>

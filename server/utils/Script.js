@@ -26,7 +26,8 @@ export function updateScript(id, data) {
         $set: {
            name: data.name,
             charts: data.charts,
-            maps: data.maps
+            maps: data.maps,
+            datasets: data.datasets,
         }
     });
 }

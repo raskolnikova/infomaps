@@ -11,6 +11,9 @@ import Chart from '../../components/chart'
 import Player from '../../components/player'
 import Timeline from '../../components/timeline'
 
+import ScriptAction from './../../action/ScriptAction'
+import ScriptStore from './../../stores/ScriptStore'
+
 import './index.less'
 
 const controlCharts = [{
@@ -151,7 +154,7 @@ export default class HomePage extends Component {
                 clearInterval(timerId);
                  this.setState({currentTimeIndex:0})
             }
-        }, 300);
+        }, 50);
             this.setState({timerId: timerId})
     }
 

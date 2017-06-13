@@ -5,7 +5,7 @@ export default class NavEditorChart extends Component {
     render() {
         return (
             <nav className="nav-editor-chart-container">
-                <Link to='/'>
+                <Link to='/constructor'>
                     <div className='button'>
                         <div className='wrap-but'>
                             <i className="fa fa-home fa-3x"></i>

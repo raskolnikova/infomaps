@@ -74,7 +74,7 @@ handleAddNameScript(name){
     render() {
         return (
             <div>
-                <NavBar/>
+               
              <div className="datasets-container">
                 <InputGroup contiguous className="search">
                     <InputGroup.Section grow>

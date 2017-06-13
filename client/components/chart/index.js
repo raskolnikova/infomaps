@@ -12,7 +12,7 @@ var
         bottom: 30
     },
     
-    xScale = 'linear',
+
    
     title = "",
 
@@ -107,9 +107,9 @@ if (!this.isNumeric(d[column[0]]))
     getChart(typeChart) {
         switch (typeChart) {
             case 'Гистограмма':
-                return <BarChart title={title} data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)} xLabel={this.state.xLabel} xScale={xScale}  yLabel={this.state.yLabel}/>
+                return <BarChart title={title} data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)} xLabel={this.state.xLabel} xScale={'ordinal'}  yLabel={this.state.yLabel}/>
             case 'График':
-                return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={this.state.width} height={this.state.height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
+                return <LineChart showXGrid={false} showYGrid={false} margins={margins} title={title} data={this.state.data} width={this.state.width} height={this.state.height} xLabel={this.state.xLabel}  yLabel={this.state.yLabel} chartSeries={this.getChartSeries(this.props.visibleColumns)} xScale={'ordinal'} x={(e, visibleColumns) => this.getX(e, this.state.visibleColumns)}/>
             case 'Круговая диаграмма':
                 return <PieChart data={this.state.data} width={this.state.width} height={this.state.height} chartSeries={this.getChartSeries(this.props.visibleColumns)} value={(data, visibleColumns) => this.getDataForPieChart(this.state.data, this.props.visibleColumns)} name={name}/>
             case 'Кольцевая диаграмма':

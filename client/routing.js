@@ -27,7 +27,8 @@ function checkLogin(nextState, replace) {
 
 export const routes = (
     <div>
-        <Route path='/' component={HomePage} onEnter={checkLogin}/>
+ <Route path='/scripts' component={Scripts} onEnter={checkLogin}/>
+        <Route path='/constructor' component={HomePage} />
         <Route path='container-charts' >
             <IndexRoute component={ContainerCharts} />
             <Route path='editor-chart' component={EditorChart}/>
@@ -37,7 +38,7 @@ export const routes = (
             <Route path='editor-map' component={EditorMap}/>
         </Route>
         <Route path='/datasets' component={Datasets}/>
-        <Route path='/scripts' component={Scripts} />
+       
         <Route path='/registration' component={Registration}/>
         <Route path='/login' component={Login}/>
         <Route path='*' component={NotFound}/>
